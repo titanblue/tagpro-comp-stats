@@ -1,0 +1,52 @@
+{
+	"Majors": [
+		["", "Radius", "Mickey Mouse Poperation", "Red Hot Chili Poppers", "She Wants the KD", "Stranger Pings", "TC Jukes", "The CreoKoalas", "The United Pingdom", "Pi", "Pi-Curious", "Origin", "Chennai Super Pings", "Centra", "Centra of Attention", "The Good Gravy Boat", "The Holy Seehawks"],
+		["Radius", "Origin", "Pi", "Centra"],
+		["", "", "MMMP", "RHCP", "MSKD", "MSRP", "MTCJ", "MCRK", "MGBR", "", "MPIC", "", "MCSP", "", "MCOA", "MGGB", "MTHS"]
+	],
+	"Minors": [
+		["", "Radius", "Minnie Mouse Poperation", "Blue Hot Chili Poppers", " The Seven Deadly Syns", "Bust a Pup", "Club Pinguin", "The CreoDudes", "Boostnia and Herzegovina", "Pi", "Pi-Curious", "Origin", "Pings XI Punjab", "Centra", "Attention Whores", "The Jungle Jukes", "Seattle Superspawnics"],
+		["Radius", "Origin", "Pi", "Centra"],
+		["", "", "NMMP", "BHCP", "N7DS", "NBAP", "NCLP", "NCRD", "NBIH", "", "NPIC", "", "NPXI", "", "NAW", "NJNG", "NSSP"]
+	],
+	"NLTP-A": [
+		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
+		["Radius", "Origin", "Pi", "Centra"],
+		["", "", "ACJK", "APRT", "APRO", "APOC", "ATTT", "", "ABOY", "ACHP", "AOPH", "ADNO", "", "AHHR", "ATBA", "", "ABFL", "ALBT", "ATNW"]
+	],
+	"NLTP-B": [
+		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
+		["Radius", "Origin", "Pi", "Centra"],
+		["", "", "BCJK", "BPRT", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
+	],
+	"USC": [
+		["", "test"],
+		["Radius", "Origin", "Sphere", "Centra", "Pi"],
+		["", "UTST"]
+	],
+	"ELTP Majors": [
+		["", "EBDN", "EIFK", "ELSU", "ERHJ", "ERMA", "ETRB"],
+		[],
+		["", "EBDN", "EIFK", "ELSU", "ERHJ", "ERMA", "ETRB"]
+	],
+	"ELTP Minors": [
+		["", "FBAL", "FFCJ", "FGOT", "FTIB", "FLGB", "FMSY", "FMMM", "FPNG"],
+		[],
+		["", "FBAL", "FFCJ", "FGOT", "FTIB", "FLGB", "FMSY", "FMMM", "FPNG"]
+	],
+	"ELTP Novice": [
+		["", "GBAL", "GFCJ", "GGOT", "GTIB", "GLGB", "GMSY", "GMMM", "GPNG"],
+		[],
+		["", "GBAL", "GFCJ", "GGOT", "GTIB", "GLGB", "GMSY", "GMMM", "GPNG"]
+	],
+	"OLTP Majors": [
+		["", "OBHT", "OC22", "OCPT", "OFAT", "ONIP", "OPNK"],
+		[],
+		["", "OBHT", "OC22", "OCPT", "OFAT", "ONIP", "OPNK"]
+	],
+	"OLTP Minors": [
+		["", "PBHT", "PC22", "PCPT", "PFAT", "PNIP", "PPNK"],
+		[],
+		["", "PBHT", "PC22", "PCPT", "PFAT", "PNIP", "PPNK"]
+	]
+}
