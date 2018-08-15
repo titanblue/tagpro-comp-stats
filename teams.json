@@ -12,17 +12,17 @@
 	"NLTP-A": [
 		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
 		["Radius", "Origin", "Pi", "Centra"],
-		["", "", "ACJK", "APRT", "APRO", "APOC", "ATTT", "", "ABOY", "ACHP", "AOPH", "ADNO", "", "AHHR", "ATBA", "", "ABFL", "ALBT", "ATNW"]
+		["", "", "ACJK", "APRE", "APRO", "APOC", "ATTT", "", "ABOY", "ACHP", "AOPH", "ADNO", "", "AHHR", "ATBA", "", "ABFL", "ALBT", "ATNW"]
 	],
 	"NLTP-B": [
 		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
 		["Radius", "Origin", "Pi", "Centra"],
-		["", "", "BCJK", "BPRT", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
+		["", "", "BCJK", "BPRE", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
 	],
 	"USC": [
-		["", "test"],
+		["", "test","test","test"],
 		["Radius", "Origin", "Sphere", "Centra", "Pi"],
-		["", "UTST"]
+		["", "UTST","UTST","UTST"]
 	],
 	"ELTP Majors": [
 		["", "EBDN", "EIFK", "ELSU", "ERHJ", "ERMA", "ETRB"],
