@@ -12,11 +12,12 @@
 // ==/UserScript==
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript
 
+// For more information: https://github.com/poeticalto/tagpro-comp-stats
 // How to use:  [SERVER is the TagPro Server, GROUPID is the group identifier if group is setup, MAPNAME is the name of the map]
 // If you want a regular comp group: http://tagpro-SERVER.koalabeast.com/groups/#cg
 // If you want a comp group set to a map: http://tagpro-SERVER.koalabeast.com/groups/#cg-MAPNAME
 // If you have a group setup but want to make it comp: http://tagpro-SERVER.koalabeast.com/groups/GROUPID/#cg
-// If you have a group setup but want to make it comp with a map: http://tagpro-SERVER.koalabeast.com/groups/groupid/#cg-MAPNAME
+// If you have a group setup but want to make it comp with a map: http://tagpro-SERVER.koalabeast.com/groups/GROUPID/#cg-MAPNAME
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // If your abbreviations are out of date, that means you need to msg /u/Poeticalto to update them for you.//
@@ -76,14 +77,14 @@ $(document).ready(function() {
             if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg-*[ 0-z]*$/) || GM_getValue("setMap","none") != "none"){ // set up map if passed through
                 var mapName = "";
                 var mapList = document.getElementsByClassName("form-control js-socket-setting")[0];
-                if (GM_getValue("setMap","none") == "none") {
+                if (GM_getValue("setMap","none") == "none") {// map name is in the url
                     mapName = window.location.href.split("-")[2].replace(" ","_").toLowerCase();
                 }
-                else {
+                else {// map name is in "setMap"
                     mapName = GM_getValue("setMap","none").replace(" ","_").toLowerCase();
                 }
                 GM_setValue("setMap","none");
-                var mapNameKey = {
+                var mapNameKey = { // This is the list of TagPro maps which does not follow standard naming conventions
                     "angry_pig":"AngryPig",
                     "bombing_run":"bomber",
                     "center_flag":"centerflag",
@@ -118,17 +119,17 @@ $(document).ready(function() {
                     "yiss_3.2":"yiss 3.2",
                     "egg_ball":"mode/eggball"
                 };
-                Array.apply(null,mapList).forEach(function(mapOption) {
+                Array.apply(null,mapList).forEach(function(mapOption) { // get the rest of the map names from the group
                     var name = mapOption.value;
                     mapNameKey[name.toLowerCase()] = name;
                 });
                 var map = mapNameKey[mapName] || ""; // defaults to random if the map name is not found
                 tagpro.group.socket.emit("setting", {name : "map", value: map}); // syncs map change to server
             }
-            if (GM_getValue("makepug","false") == "true"){
+            if (GM_getValue("makepug","false") == "true"){ // If the group has been passed through with a toggle, automatically set competitive settings
                 console.log("Automated new group detected, setting comp settings");
-                $('#pug-btn').click(); // Makes group a private game
-                document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click(); // Turns on competitive settings
+                $('#pug-btn').click();
+                document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click();
                 GM_setValue("makepug", "false");
             }
             if (GM_getValue("groupId","none") != window.location.href.split("/")[4]){
@@ -142,20 +143,20 @@ $(document).ready(function() {
             }
             GM_setValue("groupId",window.location.href.split("/")[4]);
             var buttonSettings = document.getElementsByClassName("pull-left player-settings")[0];
-            var selectList = document.createElement("select");
+            var selectList = document.createElement("select"); // selectList is the League selector in group
             selectList.id = "autoscoreLeague";
             buttonSettings.appendChild(selectList);
             selectList.className = "form-control js-socket-setting";
             var abbrRequest = new XMLHttpRequest();
-            abbrRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/teams.json");
+            abbrRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/teams.json"); // This json contains the abbreviations to use in group
             abbrRequest.responseType = "json";
             abbrRequest.send();
             abbrRequest.onload = function() {
                 GM_setValue("autoscoreAbr",abbrRequest.response);
                 var array = abbrRequest.response["Leagues"];
-                for (var i = 0; i < array.length; i++) {
+                for (var i = 0; i < array.length; i++) { // Fill in the league selector with the leagues in the json
                     var option;
-                    if (array[i] == "NA Competitive" || array[i] == "NA Tournaments" || array[i] == "EU Competitive" || array[i] == "OC Competitive"){
+                    if (array[i] == "NA Competitive" || array[i] == "NA Tournaments" || array[i] == "EU Competitive" || array[i] == "OC Competitive"){ // these are headers
                         option = document.createElement("optgroup");
                         option.label = array[i];
                     }
@@ -173,7 +174,7 @@ $(document).ready(function() {
                     selectList.value = "None";
                 }
                 updateTeamAbr();
-                document.getElementById("autoscoreLeague").onchange = function(){
+                document.getElementById("autoscoreLeague").onchange = function(){ // redo team names when league is changed
                     updateTeamAbr();
                 };
             }
@@ -193,7 +194,7 @@ $(document).ready(function() {
     if(!window.tagpro && window.location.port >=8000) {//comp game is detected when the tagpro object does not exist
         var userTeam = GM_getValue("userTeam","none");
         GM_setValue("userTeam","none");
-        var groupPort = window.location.href.split(":")[2].split("/")[0];
+        var groupPort = window.location.port;
         var m = new Date();
         var startTime = (Math.floor(m.getTime()/1000) + m.getTimezoneOffset()*60);
         console.log("Comp game detected on port "+groupPort+", player mode activated with team "+userTeam);
@@ -489,7 +490,7 @@ function setTournament(tournamentServer){
     }
 }
 
-function submitStats(backscoreRedCaps,backscoreBlueCaps,tableExport,teamNum,startTime,groupPort,endCheck){
+function submitStats(backscoreRedCaps,backscoreBlueCaps,tableExport,teamNum,startTime,groupPort,endCheck){ // submit stats at the end of the game
     var z = new Date();
     var endTime = (Math.floor(z.getTime()/1000) + z.getTimezoneOffset()*60); // gets end time in UTC
     var backscoreLink = "https://docs.google.com/forms/d/e/1FAIpQLSe57NOVRdas-tzT4MZ8-XPSkNO3MyKCTrAOyFGXp4PtNQcdkQ/formResponse?entry.133949532="+GM_getValue("backscoreRedAbr","Red")+"&entry.454687569="+GM_getValue("backscoreBlueAbr","Blue")+"&entry.184122371="+backscoreRedCaps+"&entry.1906941178="+backscoreBlueCaps+"&entry.2120828603="+GM_getValue("groupServer","none")+"&entry.1696460484="+GM_getValue("groupId","none")+"&entry.968816448="+GM_getValue("groupMap","none")+"&entry.2065162742="+encodeURIComponent(tableExport.toString().replace(/\s+/g, " "))+"&entry.2098213735="+teamNum.toString()+"&entry.2031694514="+"X"+"&entry.1523561265="+startTime+"&entry.1474408630="+endTime+"&entry.1681155627="+groupPort+"&entry.1189129646="+GM_getValue("groupTime","none")+"&entry.197322272="+"226078"+"&submit=Submit";
@@ -516,7 +517,7 @@ function submitStats(backscoreRedCaps,backscoreBlueCaps,tableExport,teamNum,star
     }
 }
 
-function updateTeamAbr(){ // This function fills in the team abbreviations
+function updateTeamAbr(){ // This function fills in the team abbreviations on the group page
     var abrJson = GM_getValue("autoscoreAbr");
     GM_setValue("autoscoreImport",document.getElementById("autoscoreLeague").value);
     var redTeamName = document.getElementsByClassName("team-name")[2];
