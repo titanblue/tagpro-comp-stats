@@ -4,8 +4,8 @@
 // @namespace      https://poeticalto.github.io/
 // @include        http://tagpro-*.koalabeast.com*
 // @description    Sets up an Autoscore/Backscore compatible no-script group and sends cap updates/stats while in game
-// @updateURL      https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/tagpro_competitive_stats.user.js
-// @downloadURL    https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/tagpro_competitive_stats.user.js
+// @updateURL      https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
+// @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
 // @version        0.31
