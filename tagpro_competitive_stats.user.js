@@ -8,7 +8,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.31
+// @version        0.32
 // ==/UserScript==
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript
 
@@ -288,7 +288,7 @@ $(document).ready(function() {
             if((GM_getValue("backRedJersey",false) || GM_getValue("backBlueJersey",false)) && enableJerseys) { // adapted version of Some Ball -1's jersey script
                 var red = GM_getValue("backRedJersey");
                 var blue = GM_getValue("backBlueJersey");
-                var jersey = [red==="none"?false:red,blue==="none"?false:blue]; //incase "none" somehow makes it through
+                var jersey = [red==="none"?false:red,blue==="none"?false:blue, GM_getValue("ballRedTrans", 1), GM_getValue("ballBlueTrans", 1), GM_getValue("jerseyRedTrans", 1), GM_getValue("jerseyBlueTrans",1)];
                 if(jersey[0] || jersey[1]) {
                     var tr = tagpro.renderer,
                         oldUPSP = tr.updatePlayerSpritePosition;
@@ -310,6 +310,18 @@ $(document).ready(function() {
                             player.sprites.jersey.anchor.y = 0.5;
                             player.sprites.jersey.x = 20;
                             player.sprites.jersey.y = 20;
+                            if (jersey[player.team+1] < 1 && jersey[player.team+1] >= 0) { // set transparency value for actual ball
+                                player.sprites.actualBall.alpha = jersey[player.team+1];
+                            }
+                            else { // reset
+                                player.sprites.actualBall.alpha = 1;
+                            }
+                            if (jersey[player.team+3] < 1 && jersey[player.team+3] >= 0) { // set transparency value for jersey
+                                player.sprites.jersey.alpha = jersey[player.team+3];
+                            }
+                            else { // reset
+                                player.sprites.jersey.alpha = 1;
+                            }
                         }
                     };
                     tr.updatePlayerSpritePosition = function(player) {
@@ -411,15 +423,23 @@ function getJerseys(){
     var teamJersey = GM_getValue("jerseyLinks");
     if (teamJersey.hasOwnProperty(specRedTeam)){// If jersey exists, set jersey
         GM_setValue("backRedJersey", teamJersey[specRedTeam][0]);
+        GM_setValue("ballRedTrans",teamJersey[specRedTeam][2]);
+        GM_setValue("jerseyRedTrans",teamJersey[specRedTeam][4]);
     }
     else {// otherwise, set to false to avoid issues
         GM_setValue("backRedJersey",false);
+        GM_setValue("ballRedTrans",1);
+        GM_setValue("jerseyRedTrans",1);
     }
     if (teamJersey.hasOwnProperty(specBlueTeam)){ // repeat for blue
         GM_setValue("backBlueJersey", teamJersey[specBlueTeam][1]);
+        GM_setValue("ballBlueTrans", teamJersey[specBlueTeam][3]);
+        GM_setValue("jerseyBlueTrans", teamJersey[specBlueTeam][5]);
     }
     else {
         GM_setValue("backBlueJersey",false);
+        GM_setValue("ballBlueTrans",1);
+        GM_setValue("jerseyBlueTrans",1);
     }
 }
 function groupReady(){
