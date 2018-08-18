@@ -54,7 +54,7 @@ teams.json holds information about each team and the corresponding abbreviation.
 
 In addition, there is a Leagues property which contains the list of all leagues in the json. This is used to populate the autoscore league selector at the top of the group page.
 
-jerseys.json holds the raw imgur IDs for the jerseys of each team. It is formatted as a json object where each team abbreviation is a property. Abbreviations are sorted alphabetically, with the exception of NLTP (with league identifiers A and B) because league rules mandate the same abbreviation for both teams. Each abbreviation contains a single array with two strings and two numbers corresponding to the raw imgur IDs of the jerseys and the transparency of each jersey. The first string is the red jersey and the second string is the blue jersey. The first number corresponds to the transparency of the actual ball with the red jersey and the second number corresponds to the transparency of the actual ball with the blue jersey. 1 is the default value while 0 is fully transparent.
+jerseys.json holds the raw imgur IDs for the jerseys of each team. It is formatted as a json object where each team abbreviation is a property. Abbreviations are sorted alphabetically, with the exception of NLTP (with league identifiers A and B) because league rules mandate the same abbreviation for both teams. Each abbreviation contains a single array with two strings and four numbers corresponding to the raw imgur IDs of the jerseys and the transparency of each jersey. The first string is the red jersey and the second string is the blue jersey. The first number corresponds to the transparency of the actual ball with the red jersey and the second number corresponds to the transparency of the actual ball with the blue jersey. The third number corresponds to the transparency of the red jersey and the second number corresponds to the transparency of the blue jersey. 1 is the default value while 0 is fully transparent.
 
 For examples on how to format each json, consult the teams.json and jerseys.json above.
 
@@ -115,3 +115,5 @@ v0.29 (08/05/2018)- "Destar's QoL update", added the option to disable the abbre
 v0.30 (08/12/2018)- Added a spectator mode and corresponding checks, fixed passing map names through URL, updated NLTP abbreviations to S13, changed default nature of tournament groups created using #tg, cleaned up in game functions, restructured update conditions for stats table, restructured various functions, restructured group identifier conditions
 
 v0.31 (08/16/2018)- Changed format of abbreviations, added jerseys to Spectator mode, fix spacing bug, fix 0-0 score update bug, extend time before first score update, general cleanup
+
+v0.32 (08/17/2018)- Added the ability to customize transparency values for jerseys
