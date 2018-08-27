@@ -16,7 +16,7 @@
 		["", "", "ACJK", "APRE", "APRO", "APOC", "ATTT", "", "ABOY", "ACHP", "AOPH", "ADNO", "", "AHHR", "ATBA", "", "ABFL", "ALBT", "ATNW"]
 	],
 	"NLTP-B": [
-		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
+		["", "Radius", " CircleJukers", " Preventure Time", " Probots", " Pursuit of Cappiness", " The Tagtime Theatre", "Origin", " Ballsagna", " Chicago Pubs", " Over The Pants Handoffs", " WCYDinos", "Pi", " He Hate Re", " Tampa Bay Aightping", "Centra", " Black Flag", " The Land Before Timers", " The Night’s Watch"],
 		["Radius", "Origin", "Pi", "Centra"],
 		["", "", "BCJK", "BPRE", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
 	],
@@ -31,12 +31,12 @@
 		["", "FFCJ", "FLGT", "FMAN", "FMAR", "FRMA", "FBAL", "FCRK", "FSNW"]
 	],
 	"OLTP Majors": [
-		["", " OBHT", " OC22", " OCPT", " OFAT", " ONIP", " OPNK"],
+		["", "OBHT", "OC22", "OCPT", "OFAT", "ONIP", "OPNK"],
 		[],
 		["", "OBHT", "OC22", "OCPT", "OFAT", "ONIP", "OPNK"]
 	],
 	"OLTP Minors": [
-		["", " PBHT", " PC22", " PCPT", " PFAT", " PNIP", " PPNK"],
+		["", "PBHT", "PC22", "PCPT", "PFAT", "PNIP", "PPNK"],
 		[],
 		["", "PBHT", "PC22", "PCPT", "PFAT", "PNIP", "PPNK"]
 	]
