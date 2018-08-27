@@ -31,12 +31,12 @@
 		["", "FFCJ", "FLGT", "FMAN", "FMAR", "FRMA", "FBAL", "FCRK", "FSNW"]
 	],
 	"OLTP Majors": [
-		["", "OBHT", "OC22", "OCPT", "OFAT", "ONIP", "OPNK"],
+		["", " OBHT", " OC22", " OCPT", " OFAT", " ONIP", " OPNK"],
 		[],
 		["", "OBHT", "OC22", "OCPT", "OFAT", "ONIP", "OPNK"]
 	],
 	"OLTP Minors": [
-		["", "PBHT", "PC22", "PCPT", "PFAT", "PNIP", "PPNK"],
+		["", " PBHT", " PC22", " PCPT", " PFAT", " PNIP", " PPNK"],
 		[],
 		["", "PBHT", "PC22", "PCPT", "PFAT", "PNIP", "PPNK"]
 	]
