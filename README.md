@@ -135,3 +135,5 @@ v0.31 (08/16/2018)- Changed format of abbreviations, added jerseys to Spectator 
 v0.32 (08/17/2018)- Added the ability to customize transparency values for jerseys
 
 v0.33 (09/01/2018)- Changed detection method for group functions, removed all usage of JQuery, added more information to cap updates, fixed bug where name spacing was incorrect, fixed bug where game data did not match between player and spectator, added general identification to cap updates/stats for fraud mitigation, general design update, general cleanup and optimization
+
+v0.34 (09/01/2018)- Fixed a group bug where leader status is not properly established by the groupReady function
