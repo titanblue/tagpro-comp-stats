@@ -20,6 +20,22 @@ Raw data can also be retrived to submit to TPL. Just copy the cell containing th
 
 ---
 
+### **Creating Custom Groups**
+
+This script offers the ability to create custom groups. This is mostly for compatibility with TToC_BOT on the NA TagPro Mumble Server.
+
+Creating custom groups:  [SERVER is the TagPro Server, GROUPID is the group identifier if group is setup, MAPNAME is the name of the map]
+
+If you want a regular comp group: http://tagpro-SERVER.koalabeast.com/groups/#cg
+
+If you want a comp group set to a map: http://tagpro-SERVER.koalabeast.com/groups/#cg-MAPNAME
+
+If you have a group setup but want to make it comp: http://tagpro-SERVER.koalabeast.com/groups/GROUPID/#cg
+
+If you have a group setup but want to make it comp with a map: http://tagpro-SERVER.koalabeast.com/groups/GROUPID/#cg-MAPNAME
+
+---
+
 ### **Using this Script in the Group Page**
 
 If you're the group leader, a new option will appear for you [underneath the swap teams button.](https://i.imgur.com/KnH9E8v.png)
@@ -117,3 +133,5 @@ v0.30 (08/12/2018)- Added a spectator mode and corresponding checks, fixed passi
 v0.31 (08/16/2018)- Changed format of abbreviations, added jerseys to Spectator mode, fix spacing bug, fix 0-0 score update bug, extend time before first score update, general cleanup
 
 v0.32 (08/17/2018)- Added the ability to customize transparency values for jerseys
+
+v0.33 (09/01/2018)- Changed detection method for group functions, removed all usage of JQuery, added more information to cap updates, fixed bug where name spacing was incorrect, fixed bug where game data did not match between player and spectator, added general identification to cap updates/stats for fraud mitigation, general design update, general cleanup and optimization
