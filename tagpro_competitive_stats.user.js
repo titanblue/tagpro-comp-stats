@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.33
+// @version        0.34
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -64,7 +64,7 @@ document.onreadystatechange = () => {
             }
             else if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g*-*[ 0-z]*$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length > 0 ){
                 // the fancy stuff for the first condition allows for a map to be passed in
-                groupReady(); // runs standard function to grab group info
+                groupReady(true); // runs standard function to grab group info
                 var leaderSwitch = false;
                 GM_setValue("groupServer",window.location.href.split("-")[1].split(".")[0]); // sets var of server
                 console.log("Group leader detected, setting up group");
@@ -195,7 +195,7 @@ document.onreadystatechange = () => {
             else if(window.location.pathname.match(/^\/groups\/[a-z]{8}$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length === 0){// non-leader in group
                 // spectator shouldn't need arguments, so there's no need to parse group type/map choice
                 console.log("Spectator/Player detected, skipping group setup");
-                groupReady();
+                groupReady(false);
                 GM_setValue("groupServer",window.location.href.split("-")[1].split(".")[0]);
                 GM_setValue("groupId",window.location.href.split("/")[4]);
             }
@@ -405,7 +405,7 @@ function capUpdate(updateRedCaps,updateBlueCaps,startTime,groupPort,tableExport,
 
 function changeLeader(status) {
     if (status) {
-        if (!!document.getElementById("autoscoreLeague")) {
+        if (!!document.getElementById("autoscoreLeague") && !!document.getElementById("redTeamAbr")) {
             document.getElementById("autoscoreLeague").style.display = "block";
             document.getElementById("redTeamAbr").style.display = "block";
             document.getElementById("blueTeamAbr").style.display = "block";
@@ -491,9 +491,8 @@ function getStats() {
     return [tableExport, teamNum, scoreboardCaps];
 }
 
-function groupReady(){ // grab necessary info from the group
+function groupReady(isLeader){ // grab necessary info from the group
     tagpro.ready(function(){
-        var isLeader = false;
         GM_setValue("compCheck",false);
         var jerseyRequest = new XMLHttpRequest();
         jerseyRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/jerseys.json"); // This json contains a master list of jerseys
