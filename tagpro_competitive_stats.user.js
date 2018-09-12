@@ -492,12 +492,12 @@ function groupReady(isLeader) { // grab necessary info from the group
         var socket = group.socket;
         socket.on("member", function(member) {
             group.players[member.id] = Object.assign(group.players[member.id] || {}, member);
-            if (typeof tagpro.group.players[GM_getValue("tpUserId", undefined)] != "undefined") {
+            /*if (typeof tagpro.group.players[GM_getValue("tpUserId", undefined)] != "undefined") {
                 if (tagpro.group.players[GM_getValue("tpUserId")].leader != isLeader) {
-                    //isLeader = tagpro.group.players[GM_getValue("tpUserId")].leader;
-                    //changeLeader(isLeader);
+                    isLeader = tagpro.group.players[GM_getValue("tpUserId")].leader;
+                    changeLeader(isLeader);
                 }
-            }
+            }*/
         });
         socket.on("play", function() {
             if (typeof group != "undefined" && typeof group.self != "undefined" && typeof group.players != "undefined") {
