@@ -10,29 +10,30 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.35
+// @version        0.36
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
 // If your abbreviations/jerseys are out of date, message /u/Poeticalto using the support link above so he can update them.
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Custom Options can be accessed through the following steps:                         //
-// 1. Create a private group as the leader.                                            //
-// 2. Click on the League Modifier Box. (Underneath the Swap Teams button)             //
-// 3. At the bottom of the list, click on the option you want to toggle.               //
-// The option's current state will be shown in brackets. (like [currently enabled])    //
-// Current Options:                                                                    //
-// Enable/Disable Jerseys = Enables/Disables team jerseys in spectator mode            //
-// Enable/Disable Jersey Spin = Enables/Disables the spin of jerseys in spectator mode //
-/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Custom Options can be accessed through the following steps:                                           //
+// 1. Create a private group as the leader.                                                              //
+// 2. Click on the League Modifier Box. (Underneath the Swap Teams button)                               //
+// 3. At the bottom of the list, click on the option you want to toggle.                                 //
+// The option's current state will be shown in brackets. (like [currently enabled])                      //
+// Current Options:                                                                                      //
+// Enable/Disable Jerseys = Enables/Disables team jerseys in spectator mode                              //
+// Enable/Disable Jersey Spin = Enables/Disables the spin of jerseys in spectator mode                   //
+// Enable/Disable Save Stats Locally = Allows the user to locally save game stats after leaving the game //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Log script in console
 console.log(GM_info.script.name + ' active (Version: ' + GM_info.script.version + ')');
 
 // Start Script (Group functions)
 if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g*-*[ 0-z]*$/)) { // This gets your unique ID to determine which team you are in the group
-    //This is separate from the main functions because the 'you' event may get sent before the rest of the script has time to load
+    //This is separate from the main functions because the 'you' event may get sent before the rest of the script has loaded
     tagpro.ready(function() {
         tagpro.group.socket.on("you", function(p) {
             GM_setValue("tpUserId", p);
@@ -55,133 +56,15 @@ document.onreadystatechange = () => {
                 document.getElementById("create-group-btn").click(); // create group
             } else if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g*-*[ 0-z]*$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length > 0) {
                 // the fancy stuff for the first condition allows for a map to be passed in
-                groupReady(true); // runs standard function to grab group info
-                console.log("Group leader detected, setting up group");
-                if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg*-*[0-z]*$/)) { // set up tournament abbreviations if #tg is passed through
-                    setTournament(window.location.href.split("-")[1].split(".")[0]);
-                }
-                if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg-*[ 0-z]*$/) || GM_getValue("setMap", "none") != "none") { // set up map if passed through
-                    var mapName = "";
-                    var mapList = document.getElementsByClassName("form-control js-socket-setting")[0];
-                    if (GM_getValue("setMap", "none") == "none") { // map name is in the url
-                        mapName = window.location.href.split("-")[2].replace(" ", "_").toLowerCase();
-                    } else { // map name is in "setMap"
-                        mapName = GM_getValue("setMap", "none").replace(" ", "_").toLowerCase();
-                    }
-                    GM_setValue("setMap", "none");
-                    var mapNameKey = { // This is the list of TagPro maps which does not follow standard naming conventions
-                        "angry_pig": "AngryPig",
-                        "bombing_run": "bomber",
-                        "center_flag": "centerflag",
-                        "command_center": "CommandCenter",
-                        "danger_zone_3": "DangerZone",
-                        "geokoala": "teamwork",
-                        "hurricane": "Hurricane2",
-                        "hyper_reactor": "HyperReactor",
-                        "mars_ball_explorer": "WelcomeToMars",
-                        "mars_game_mode": "GameMode",
-                        "mode_7": "Mode7",
-                        "snes_v2": "snes",
-                        "thinking_with_portals": "ThinkingWithPortals",
-                        "big_vird": "vee2",
-                        "blast_off": "blastoff",
-                        "boostsv2.1": "Boosts",
-                        "contain_masters": "ContainMasters",
-                        "diamond_faces": "Diamond",
-                        "dumbell": "fullspeed",
-                        "event_horizon": "eventhorizon",
-                        "event_horizon_2": "eventhorizon2",
-                        "figure_8": "map2-2",
-                        "glory_hole": "RiskAndReward",
-                        "grail_of_speed": "GrailOfSpeed",
-                        "open_field_masters": "OFM",
-                        "pokeball": "community1",
-                        "push_it": "PushIt",
-                        "the_holy_see": "HolySee",
-                        "holy_see": "HolySee",
-                        "vee": "bird",
-                        "whirlwind_2": "whirlwind",
-                        "yiss_3.2": "yiss 3.2",
-                        "egg_ball": "mode/eggball"
-                    };
-                    Array.apply(null, mapList).forEach(function(mapOption) { // get the rest of the map names from the group
-                        var name = mapOption.value;
-                        mapNameKey[name.toLowerCase()] = name;
-                    });
-                    var map = mapNameKey[mapName] || ""; // defaults to random if the map name is not found
-                    tagpro.group.socket.emit("setting", { name: "map", value: map }); // syncs map change to server
-                }
-                if (GM_getValue("makepug", false) === true) { // If the group has been passed through with a toggle, automatically set competitive settings
-                    console.log("Automated new group detected, setting comp settings");
-                    document.getElementById("pug-btn").click();
-                    document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click();
-                    GM_setValue("makepug", false);
-                }
-                if (GM_getValue("groupId", "none") != window.location.href.split("/")[4]) {
-                    console.log("New group detected");
-                    document.getElementById("pug-btn").onclick = function() { // Makes group a private game
-                        console.log("Private group detected, setting up comp settings");
-                        if (document.getElementsByName("competitiveSettings")[0].checked == false) {
-                            document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click(); // Turns on competitive settings
-                        }
-                    }
-                }
-                GM_setValue("groupId", window.location.href.split("/")[4]);
-                var buttonSettings = document.getElementsByClassName("pull-left player-settings")[0];
-                var selectList = document.createElement("select"); // selectList is the League selector in group
-                selectList.id = "autoscoreLeague";
-                buttonSettings.appendChild(selectList);
-                selectList.className = "form-control js-socket-setting";
-                selectList.style.margin = "1% 0%";
-                selectList.title = "Click here to set a league for team abbreviations or change custom settings!";
-                var abbrRequest = new XMLHttpRequest();
-                abbrRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/teams.json"); // This json contains the abbreviations to use in group
-                abbrRequest.responseType = "json";
-                abbrRequest.send();
-                abbrRequest.onload = function() {
-                    GM_setValue("autoscoreAbr", abbrRequest.response);
-                    var array = abbrRequest.response.Leagues;
-                    array.push("TagPro Competitive Stats Settings");
-                    if (GM_getValue("backJerseyFlag", true)) {
-                        array.push("Disable Jerseys [Currently Enabled]");
-                    } else {
-                        array.push("Enable Jerseys [Currently Disabled]");
-                    }
-                    if (GM_getValue("backJerseySpin", true)) {
-                        array.push("Disable Jersey Spin [Currently Enabled]");
-                    } else {
-                        array.push("Enable Jersey Spin [Currently Disabled]");
-                    }
-                    for (var i = 0; i < array.length; i++) { // Fill in the league selector with the leagues in the json
-                        var option;
-                        var headerList = ["NA Competitive", "NA Tournaments", "EU Competitive", "OC Competitive", "TagPro Competitive Stats Settings"];
-                        if (headerList.indexOf(array[i]) >= 0) { // these are headers
-                            option = document.createElement("optgroup");
-                            option.label = array[i];
-                        } else {
-                            option = document.createElement("option");
-                            option.value = array[i];
-                            option.text = array[i];
-                        }
-                        selectList.appendChild(option);
-                    }
-                    if (abbrRequest.response.Leagues.indexOf(GM_getValue("autoscoreImport", "None")) > -1) { // Standard Import Condition
-                        selectList.value = GM_getValue("autoscoreImport", "None");
-                    } else { // This happens when the league has been removed from the teams json, usually because the season is over or league is dead
-                        selectList.value = "None";
-                    }
-                    updateTeamAbr();
-                    document.getElementById("autoscoreLeague").onchange = function() { // redo team names when league is changed
-                        updateTeamAbr();
-                    };
-                }
+                leaderReady();
+                groupReady(true);
             } else if (window.location.pathname.match(/^\/groups\/[a-z]{8}$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length === 0) { // non-leader in group
                 // spectator shouldn't need arguments, so there's no need to parse group type/map choice
+                GM_setValue("groupId", window.location.href.split("/")[4]);
                 console.log("Spectator/Player detected, skipping group setup");
                 groupReady(false);
-                GM_setValue("groupId", window.location.href.split("/")[4]);
             }
-        }, 100);
+        }, 300);
     }
 };
 
@@ -196,7 +79,6 @@ document.onreadystatechange = () => {
         var m = new Date();
         var startTime = (Math.floor(m.getTime() / 1000) + m.getTimezoneOffset() * 60);
         console.log("Comp game detected on port " + groupPort + ", player mode activated with team " + userTeam);
-        const refreshRate = 10; // Times per second to update stats
         var backscoreRedCaps = 0; //backscore is taken directly from scoreboard, so it can be trusted
         var backscoreBlueCaps = 0;
         var updateRedCaps = 0; //auto is guessed from sound events, so it can't be trusted completely [used for cap updates]
@@ -205,6 +87,9 @@ document.onreadystatechange = () => {
         var tableExport = [];
         var scoreboardCaps = [0, 0];
         var teamNum = [];
+        var sendCheck = GM_getValue("tpcsConfirmation", false);
+        var localCheck = GM_getValue("backLocalStorage", false);
+		console.log(localCheck);
         document.getElementById("cheering").addEventListener("play", goodCap, false); //Note: play event does not activate if sounds are muted
         document.getElementById("sigh").addEventListener("play", badCap, false); // However, play event does activate is volume is set to 0 (but no mute)
         function goodCap() {
@@ -212,17 +97,18 @@ document.onreadystatechange = () => {
                 console.log("Start of comp game detected");
                 var x = new Date();
                 startTime = (Math.floor(x.getTime() / 1000) + x.getTimezoneOffset() * 60); // gets start time in UTC to avoid timezone confusion
-                firstSound = false;
             } else if (userTeam == 1) { // adds cap to Red team
                 updateRedCaps += 1;
             } else if (userTeam == 2) { // adds cap to Blue team
                 updateBlueCaps += 1;
             }
             if ((userTeam == 1 || userTeam == 2) && (updateRedCaps != 0 || updateBlueCaps != 0 || firstSound === true)) {
-                capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
+                if (sendCheck === true) {
+                    capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
+                }
+				firstSound = false;
             }
         }
-
         function badCap() {
             if (userTeam == 1) {
                 updateBlueCaps += 1;
@@ -230,18 +116,11 @@ document.onreadystatechange = () => {
                 updateRedCaps += 1;
             }
             if (userTeam == 1 || userTeam == 2) {
-                capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
+                if (sendCheck === true) {
+                    capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
+                }
             }
         }
-        window.onbeforeunload = function() { //send stats before exiting the game
-            if (typeof(backscoreRedCaps) == "undefined") { // undefined happens when there is no player on a team, so redefine to 0.
-                backscoreRedCaps = 0;
-            }
-            if (typeof(backscoreBlueCaps) == "undefined") {
-                backscoreBlueCaps = 0;
-            }
-            submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, false);
-        };
         setInterval(function() {
             if (document.getElementById("options").style.display == "block") {
                 var playerStats = getStats(); // This was split into a function because I'm trying to see if the stats table can be updated without having the table open
@@ -250,14 +129,33 @@ document.onreadystatechange = () => {
                 backscoreRedCaps = playerStats[2][0];
                 backscoreBlueCaps = playerStats[2][1];
             }
-        }, 1000 / refreshRate);
-        document.onkeydown = function() {
-            if (event.keyCode == 27) {
-                if (document.getElementById("options").style.display == "block") {
-                    setTimeout(function() {
-                        capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
-                    }, 500);
-                }
+        }, 100); // update ten times per second
+        document.onkeydown = function() { // This function sends a backup of the scoreboard in case partial stats are needed or stats need to be recreated.
+            if (event.keyCode == 27) { // 27 corresponds to escape key
+                setTimeout(function() { // setTimeout is used to ensure the scoreboard is updated before the stats get sent
+                    if (document.getElementById("options").style.display == "block") { // checks if scoreboard is open
+                        if (sendCheck === true) {
+                            capUpdate(backscoreRedCaps, backscoreBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
+                        }
+                    }
+                }, 500);
+            }
+        };
+        window.onbeforeunload = function() { //send stats before exiting the game
+            if (typeof(backscoreRedCaps) == "undefined") { // undefined happens when there is no player on a team, so redefine to 0.
+                backscoreRedCaps = 0;
+            }
+            if (typeof(backscoreBlueCaps) == "undefined") {
+                backscoreBlueCaps = 0;
+            }
+            if (sendCheck === true && localCheck === false) { // send stats, but do not save locally
+                submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, false, 0);
+            }
+            else if (sendCheck === true && localCheck === true) { // send stats AND save locally
+                submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, false, 1);
+            }
+            else { // only save stats locally
+                submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, false, 2);
             }
         };
     } else if (GM_getValue("compCheck", false) === true && window.location.port >= 8000) { // Spectator mode
@@ -271,6 +169,8 @@ document.onreadystatechange = () => {
         var specBlueCaps = 0;
         var endSubmit = false;
         var firstUpdate = false;
+        var specUpdateCheck = GM_getValue("tpcsConfirmation", false);
+        var specLocalCheck = GM_getValue("backLocalStorage", false);
         console.log("TagPro Competitive Stats is now running in Spectator mode on port " + window.location.port);
         tagpro.ready(function() {
             if ((GM_getValue("backRedJersey", false) || GM_getValue("backBlueJersey", false)) && GM_getValue("backJerseyFlag", true)) { // adapted version of Some Ball -1's jersey script
@@ -338,7 +238,9 @@ document.onreadystatechange = () => {
                 }
                 var currentId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
                 var capStats = getSpecStats(currentId);
-                capUpdate(tagpro.score.r, tagpro.score.b, specStartTime, specGroupPort, capStats[0], capStats[1], specServer); // first update should come from here since it has the correct start time
+                if (specUpdateCheck === true) {
+                    capUpdate(tagpro.score.r, tagpro.score.b, specStartTime, specGroupPort, capStats[0], capStats[1], specServer); // first update should come from here since it has the correct start time
+                }
             }
             setTimeout(setStartTime, 1000); // tagpro.gameEndsAt is not immediately available, so ping a little after
             tagpro.socket.on("score", function(data) { // Cap update condition
@@ -351,7 +253,9 @@ document.onreadystatechange = () => {
                     }
                     var currentId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
                     var capStats = getSpecStats(currentId);
-                    capUpdate(specRedCaps, specBlueCaps, specStartTime, specGroupPort, capStats[0], capStats[1], specServer);
+                    if (specUpdateCheck === true) {
+                        capUpdate(specRedCaps, specBlueCaps, specStartTime, specGroupPort, capStats[0], capStats[1], specServer);
+                    }
                 } else {
                     firstUpdate = true;
                 }
@@ -359,20 +263,36 @@ document.onreadystatechange = () => {
             tagpro.socket.on("end", function(data) { //  submit stats when the game ends
                 var finalId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
                 var specStats = getSpecStats(finalId);
-                submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, true);
+                if (specUpdateCheck === true && specLocalCheck === false) { // send stats, but do not save locally
+                    submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, true, 0);
+                }
+                else if (specUpdateCheck === true && specLocalCheck === true) { // send stats AND save locally
+                    submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, true, 1);
+                }
+                else { // only save stats locally
+                    submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, true, 2);
+                }
                 endSubmit = true;
             });
             /*tagpro.socket.on("playerLeft", function (id) {
                 // support for players leaving will be added in a future update.
             });*/
         });
-        window.onbeforeunload = function() { // sends stats if you leave the game for some reason before the end event
+        window.onbeforeunload = function() { // sends stats if you leave the game for some reason before the end event, or if stats fail to send during the end event
             GM_getValue("backRedJersey", false);
             GM_getValue("backBlueJersey", false);
             if (endSubmit === false) {
                 var finalId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
                 var specStats = getSpecStats(finalId);
-                submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, false);
+                if (specUpdateCheck === true && specLocalCheck === false) { // send stats, but do not save locally
+                    submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, false, 0);
+                }
+                else if (specUpdateCheck === true && specLocalCheck === true) { // send stats AND save locally
+                    submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, false, 1);
+                }
+                else { // only save stats locally
+                    submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, false, 2);
+                }
             }
         };
     }
@@ -391,22 +311,28 @@ function capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExp
     }
 }
 
-function changeLeader(status) { // this function is broken, I'll fix in a future update.
-    setTimeout(function() {
-        if (status) {
-            if (!!document.getElementById("autoscoreLeague") && !!document.getElementById("redTeamAbr")) {
-                document.getElementById("autoscoreLeague").style.display = "block";
-                document.getElementById("redTeamAbr").style.display = "block";
-                document.getElementById("blueTeamAbr").style.display = "block";
-            } else {
-                location.reload();
-            }
+function changeLeader(status) {
+    if (status) {
+        if (!!document.getElementById("autoscoreLeague") && !!document.getElementById("redTeamAbr")) {
+            document.getElementById("autoscoreLeague").style.display = "block";
+            document.getElementById("redTeamAbr").style.display = "block";
+            document.getElementById("blueTeamAbr").style.display = "block";
         } else {
-            document.getElementById("autoscoreLeague").style.display = "none";
-            document.getElementById("redTeamAbr").style.display = "none";
-            document.getElementById("blueTeamAbr").style.display = "none";
+            leaderReady();
         }
-    }, 100);
+    } else {
+        document.getElementById("autoscoreLeague").style.display = "none";
+        document.getElementById("redTeamAbr").style.display = "none";
+        document.getElementById("blueTeamAbr").style.display = "none";
+    }
+}
+
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
 }
 
 function getJerseys() { // set jerseys for each team
@@ -492,12 +418,12 @@ function groupReady(isLeader) { // grab necessary info from the group
         var socket = group.socket;
         socket.on("member", function(member) {
             group.players[member.id] = Object.assign(group.players[member.id] || {}, member);
-            /*if (typeof tagpro.group.players[GM_getValue("tpUserId", undefined)] != "undefined") {
+            if (typeof tagpro.group.players[GM_getValue("tpUserId", undefined)] != "undefined") {
                 if (tagpro.group.players[GM_getValue("tpUserId")].leader != isLeader) {
                     isLeader = tagpro.group.players[GM_getValue("tpUserId")].leader;
                     changeLeader(isLeader);
                 }
-            }*/
+            }
         });
         socket.on("play", function() {
             if (typeof group != "undefined" && typeof group.self != "undefined" && typeof group.players != "undefined") {
@@ -511,9 +437,9 @@ function groupReady(isLeader) { // grab necessary info from the group
             GM_setValue("groupTime", document.getElementsByTagName("select").time.value);
             GM_setValue("groupCapLimit", document.getElementsByTagName("select").caps.value);
             if (tagpro.group.players[GM_getValue("tpUserId", undefined)]) {
-                GM_setValue("backscorePlayer", encodeURIComponent(tagpro.group.players[GM_getValue("tpUserId", undefined)].name + " (" + GM_info.script.version + ")"));
+                GM_setValue("backscorePlayer", encodeURIComponent(tagpro.group.players[GM_getValue("tpUserId", undefined)].name + " (" + checkVersion + ")"));
             } else {
-                GM_setValue("backscorePlayer", encodeURIComponent("Some Ball (" + GM_info.script.version + ")"));
+                GM_setValue("backscorePlayer", encodeURIComponent("Some Ball (" + checkVersion + ")"));
             }
             var scriptCheck = false; // check if no script is enabled
             var warnCheck = false; // check if respawn warnings are disabled
@@ -533,7 +459,141 @@ function groupReady(isLeader) { // grab necessary info from the group
                 GM_setValue("compCheck", false);
             }
         });
+        var checkVersion = GM_getValue("tpcsCurrentVer",0);
+        if (checkVersion != GM_info.script.version || GM_getValue("tpcsConfirmation", false) === false) {
+            checkVersion = GM_info.script.version;
+            GM_setValue("tpcsCurrentVer",checkVersion);
+            var updateNotes = "The TagPro Competitive Stats Userscript has been updated to V" + GM_info.script.version + "!\nHere is a summary of updates:\n1. Refactored leader code to allow swapping between leader/spectator\n2. increased timeout for group functions\n3. Added ability to save game data locally\n4. Fixed incorrect executions of capUpdate function\n5. Reimplement checkLeader function\n6. Added ability to show update notes in userscript\nClicking Ok means you accept the changes to this script and the corresponding privacy policy.\nThe full privacy policy and change log can be found by going to the script homepage through the Tampermonkey menu."
+            GM_setValue("tpcsConfirmation", window.confirm(updateNotes));
+        }
     });
+}
+
+function leaderReady() {
+    console.log("Group leader detected, setting up group");
+    if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg*-*[0-z]*$/)) { // set up tournament abbreviations if #tg is passed through
+        setTournament(window.location.href.split("-")[1].split(".")[0]);
+    }
+    if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg-*[ 0-z]*$/) || GM_getValue("setMap", "none") != "none") { // set up map if passed through
+        var mapName = "";
+        var mapList = document.getElementsByClassName("form-control js-socket-setting")[0];
+        if (GM_getValue("setMap", "none") == "none") { // map name is in the url
+            mapName = window.location.href.split("-")[2].replace(" ", "_").toLowerCase();
+        } else { // map name is in "setMap"
+            mapName = GM_getValue("setMap", "none").replace(" ", "_").toLowerCase();
+        }
+        GM_setValue("setMap", "none");
+        var mapNameKey = { // This is the list of TagPro maps which does not follow standard naming conventions
+            "angry_pig": "AngryPig",
+            "bombing_run": "bomber",
+            "center_flag": "centerflag",
+            "command_center": "CommandCenter",
+            "danger_zone_3": "DangerZone",
+            "geokoala": "teamwork",
+            "hurricane": "Hurricane2",
+            "hyper_reactor": "HyperReactor",
+            "mars_ball_explorer": "WelcomeToMars",
+            "mars_game_mode": "GameMode",
+            "mode_7": "Mode7",
+            "snes_v2": "snes",
+            "thinking_with_portals": "ThinkingWithPortals",
+            "big_vird": "vee2",
+            "blast_off": "blastoff",
+            "boostsv2.1": "Boosts",
+            "contain_masters": "ContainMasters",
+            "diamond_faces": "Diamond",
+            "dumbell": "fullspeed",
+            "event_horizon": "eventhorizon",
+            "event_horizon_2": "eventhorizon2",
+            "figure_8": "map2-2",
+            "glory_hole": "RiskAndReward",
+            "grail_of_speed": "GrailOfSpeed",
+            "open_field_masters": "OFM",
+            "pokeball": "community1",
+            "push_it": "PushIt",
+            "the_holy_see": "HolySee",
+            "holy_see": "HolySee",
+            "vee": "bird",
+            "whirlwind_2": "whirlwind",
+            "yiss_3.2": "yiss 3.2",
+            "egg_ball": "mode/eggball"
+        };
+        Array.apply(null, mapList).forEach(function(mapOption) { // get the rest of the map names from the group
+            var name = mapOption.value;
+            mapNameKey[name.toLowerCase()] = name;
+        });
+        var map = mapNameKey[mapName] || ""; // defaults to random if the map name is not found
+        tagpro.group.socket.emit("setting", {name: "map", value: map}); // syncs map change to server
+    }
+    if (GM_getValue("makepug", false) === true) { // If the group has been passed through with a toggle, automatically set competitive settings
+        console.log("Automated new group detected, setting comp settings");
+        document.getElementById("pug-btn").click();
+        document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click();
+        GM_setValue("makepug", false);
+    }
+    if (GM_getValue("groupId", "none") != window.location.href.split("/")[4]) {
+        console.log("New group detected");
+        document.getElementById("pug-btn").onclick = function() { // Makes group a private game
+            console.log("Private group detected, setting up comp settings");
+            if (document.getElementsByName("competitiveSettings")[0].checked == false) {
+                document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click(); // Turns on competitive settings
+            }
+        }
+    }
+    GM_setValue("groupId", window.location.href.split("/")[4]);
+    var buttonSettings = document.getElementsByClassName("pull-left player-settings")[0];
+    var selectList = document.createElement("select"); // selectList is the League selector in group
+    selectList.id = "autoscoreLeague";
+    buttonSettings.appendChild(selectList);
+    selectList.className = "form-control js-socket-setting";
+    selectList.style.margin = "1% 0%";
+    selectList.title = "Click here to set a league for team abbreviations or change custom settings!";
+    var abbrRequest = new XMLHttpRequest();
+    abbrRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/teams.json"); // This json contains the abbreviations to use in group
+    abbrRequest.responseType = "json";
+    abbrRequest.send();
+    abbrRequest.onload = function() {
+        GM_setValue("autoscoreAbr", abbrRequest.response);
+        var array = abbrRequest.response.Leagues;
+        array.push("TagPro Competitive Stats Settings");
+        if (GM_getValue("backJerseyFlag", true) === true) {
+            array.push("Disable Jerseys [Currently Enabled]");
+        } else {
+            array.push("Enable Jerseys [Currently Disabled]");
+        }
+        if (GM_getValue("backJerseySpin", true) === true) {
+            array.push("Disable Jersey Spin [Currently Enabled]");
+        } else {
+            array.push("Enable Jersey Spin [Currently Disabled]");
+        }
+        if (GM_getValue("backLocalStorage", false) === true) {
+            array.push("Disable Saving Local Stats [Currently Enabled]");
+        } else {
+            array.push("Enable Saving Local Stats [Currently Disabled]");
+        }
+        for (var i = 0; i < array.length; i++) { // Fill in the league selector with the leagues in the json
+            var option;
+            var headerList = ["NA Competitive", "NA Tournaments", "EU Competitive", "OC Competitive", "TagPro Competitive Stats Settings"];
+            if (headerList.indexOf(array[i]) >= 0) { // these are headers
+                option = document.createElement("optgroup");
+                option.label = array[i];
+            } else {
+                option = document.createElement("option");
+                option.value = array[i];
+                option.text = array[i];
+            }
+            selectList.appendChild(option);
+        }
+        if (abbrRequest.response.Leagues.indexOf(GM_getValue("autoscoreImport", "None")) > -1) { // Standard Import Condition
+            selectList.value = GM_getValue("autoscoreImport", "None");
+        } else { // This happens when the league has been removed from the teams json, usually because the season is over or league is dead
+            selectList.value = "None";
+        }
+        updateTeamAbr();
+        document.getElementById("autoscoreLeague").onchange = function() { // redo team names when league is changed
+            updateTeamAbr();
+        };
+    }
 }
 
 function openSettings(setting) {
@@ -550,6 +610,12 @@ function openSettings(setting) {
     } else if (setting == "Enable Jersey Spin [Currently Disabled]") {
         GM_setValue("backJerseySpin", true);
         newSetting = "Disable Jersey Spin [Currently Enabled]";
+    } else if (setting == "Enable Saving Local Stats [Currently Disabled]") {
+        GM_setValue("backLocalStorage", true);
+        newSetting = "Disable Saving Local Stats [Currently Enabled]";
+    } else if (setting == "Disable Saving Local Stats [Currently Enabled]") {
+        GM_setValue("backLocalStorage", false);
+        newSetting = "Enable Saving Local Stats [Currently Disabled]";
     }
     var updateSettingsArray = document.getElementById("autoscoreLeague").getElementsByTagName("option");
     for (var i = updateSettingsArray.length - 1; i >= 0; i--) { // loop backwards in the league selector array to update setting text
@@ -597,8 +663,9 @@ function sortByScore(playerArr) { // bubble sort id array based on the score
     return playerArr;
 }
 
-function submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, endCheck) { // submit stats at the end of the game
+function submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, endCheck, localCheck) { // submit stats at the end of the game
     var submitRequest = new XMLHttpRequest();
+    var doneCheck = true;
     var z = new Date();
     var endTime = (Math.floor(z.getTime() / 1000) + z.getTimezoneOffset() * 60); // gets end time in UTC
     var backscoreLink = "https://docs.google.com/forms/d/e/1FAIpQLSe57NOVRdas-tzT4MZ8-XPSkNO3MyKCTrAOyFGXp4PtNQcdkQ/formResponse?entry.133949532=" + GM_getValue("backscoreRedAbr", "Red") + "&entry.454687569=" + GM_getValue("backscoreBlueAbr", "Blue") + "&entry.184122371=" + backscoreRedCaps + "&entry.1906941178=" + backscoreBlueCaps + "&entry.2120828603=" + groupServer + "&entry.1696460484=" + GM_getValue("groupId", "none") + "&entry.968816448=" + GM_getValue("groupMap", "none") + "&entry.2065162742=" + encodeURIComponent(tableExport.toString()) + "&entry.2098213735=" + teamNum.toString() + "&entry.1523561265=" + startTime + "&entry.1474408630=" + endTime + "&entry.1681155627=" + groupPort + "&entry.1189129646=" + GM_getValue("groupTime", "none") + "&entry.197322272=" + GM_getValue("backscorePlayer", "Some%20Ball");
@@ -608,26 +675,43 @@ function submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, 
     }
     if (endCheck === true) { // This occurs when a spectator reaches the end of the game and the 'end' event is activated
         submitRequest.open("POST", backscoreLink + "&entry.2031694514=" + "X" + "&submit=Submit");
-        submitRequest.send();
         console.log("Game detected as complete [End event], stats submitted");
     } else if (endTime - startTime > GM_getValue("groupTime", 0) * 60) { //This is the Time success condition, when stats are submitted after the game has ended
         submitRequest.open("POST", backscoreLink + "&entry.2031694514=" + "X" + "&submit=Submit");
-        submitRequest.send();
         console.log("Game detected as complete [Time], stats submitted");
     } else if (backscoreRedCaps == groupCapLimit || backscoreBlueCaps == groupCapLimit) { //This is the Cap success condition, when stats are submitted when cap limit is reached
         submitRequest.open("POST", backscoreLink + "&entry.2031694514=" + "X" + "&submit=Submit");
-        submitRequest.send();
         console.log("Game detected as complete [Cap Limit], stats submitted");
     } else { //Everything else means something went wrong, i.e. game ended early or the you left the game early
         submitRequest.open("POST", backscoreLink + "&submit=Submit");
-        submitRequest.send();
+        doneCheck = false;
         console.log("Game detected as incomplete, stats submitted");
+    }
+    if (localCheck <= 1) { // send stats to server
+        submitRequest.send();
+    }
+    if (localCheck >= 1) { // save stats locally
+        var dataJson = {
+            "complete": doneCheck,
+            "redTeamName": GM_getValue("backscoreRedAbr", "Red"),
+            "blueTeamName": GM_getValue("backscoreBlueAbr", "Red"),
+            "groupServer": groupServer,
+            "groupId": GM_getValue("groupId", "none"),
+            "groupMap": GM_getValue("groupMap", "none"),
+            "playerStats": encodeURIComponent(tableExport.toString()),
+            "teamNum": teamNum.toString(),
+            "startTime":  startTime,
+            "endTime":  endTime,
+            "groupPort": groupPort,
+            "groupTime":  GM_getValue("groupTime", "none")
+        };
+        download(JSON.stringify(dataJson),"tpcs-"+dataJson.startTime+"-"+dataJson.redTeamName+"-"+dataJson.blueTeamName+".json", "application/json");
     }
 }
 
 function updateTeamAbr() { // This function fills in the team abbreviations on the group page
     var abrJson = GM_getValue("autoscoreAbr");
-    var settingsList = ["Disable Jerseys [Currently Enabled]", "Enable Jerseys [Currently Disabled]", "Disable Jersey Spin [Currently Enabled]", "Enable Jersey Spin [Currently Disabled]"];
+    var settingsList = ["Disable Jerseys [Currently Enabled]", "Enable Jerseys [Currently Disabled]", "Disable Jersey Spin [Currently Enabled]", "Enable Jersey Spin [Currently Disabled]", "Disable Saving Local Stats [Currently Enabled]", "Enable Saving Local Stats [Currently Disabled]"];
     if (settingsList.indexOf(document.getElementById("autoscoreLeague").value) >= 0) {
         openSettings(document.getElementById("autoscoreLeague").value);
         document.getElementById("autoscoreLeague").value = GM_getValue("autoscoreImport", "none");
