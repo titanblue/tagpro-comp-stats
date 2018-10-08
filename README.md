@@ -4,6 +4,8 @@ The purpose of the TagPro Competitive Stats userscript is to save competitive ga
 
 This userscript and the corresponding database of game data are not supported or affiliated with TagPro or KoalaBeast.
 
+**[Read the full Privacy Policy here.](https://docs.google.com/document/d/1wb4YO8zmcV9xtQYp_Hq3mrDEw2YPfThDukmT_sX1A1M/edit?usp=sharing)**
+
 ---
 
 ### [Download the userscript here](https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js)
@@ -134,6 +136,10 @@ v0.31 (08/16/2018)- Changed format of abbreviations, added jerseys to Spectator 
 
 v0.32 (08/17/2018)- Added the ability to customize transparency values for jerseys
 
-v0.33 (09/01/2018)- Changed detection method for group functions, removed all usage of JQuery, added more information to cap updates, fixed bug where name spacing was incorrect, fixed bug where game data did not match between player and spectator, added general identification to cap updates/stats for fraud mitigation, general design update, general cleanup and optimization
+v0.33 (09/01/2018)- Changed detection method for group functions, removed all usage of JQuery, added more information to cap updates, fixed bug where name spacing was incorrect, fixed bug where game data did not match between player and spectator, added general identification to cap updates/stats for fraud mitigation, general design updates, general cleanup and optimization
 
 v0.34 (09/01/2018)- Fixed a group bug where leader status is not properly established by the groupReady function
+
+v0.35 (09/12/2018)- Removed direct group creation link, removed groupLeader functions, general cleanup
+
+v0.36 (09/30/2018)- Refactored code to allow change between leader/spectator, increased timout time for group functions, added ability to save game data locally, fixed cap update spam bug, reimplement checkLeader function, added ability to show update notes in group, officially added privacy policy
