@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.36
+// @version        0.36a
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -89,7 +89,6 @@ document.onreadystatechange = () => {
         var teamNum = [];
         var sendCheck = GM_getValue("tpcsConfirmation", false);
         var localCheck = GM_getValue("backLocalStorage", false);
-		console.log(localCheck);
         document.getElementById("cheering").addEventListener("play", goodCap, false); //Note: play event does not activate if sounds are muted
         document.getElementById("sigh").addEventListener("play", badCap, false); // However, play event does activate is volume is set to 0 (but no mute)
         function goodCap() {
@@ -106,7 +105,7 @@ document.onreadystatechange = () => {
                 if (sendCheck === true) {
                     capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
                 }
-				firstSound = false;
+                firstSound = false;
             }
         }
         function badCap() {
@@ -425,40 +424,6 @@ function groupReady(isLeader) { // grab necessary info from the group
                 }
             }
         });
-        socket.on("play", function() {
-            if (typeof group != "undefined" && typeof group.self != "undefined" && typeof group.players != "undefined") {
-                GM_setValue("userTeam", group.players[group.self].team);
-            } else if (typeof group.self == "undefined") {
-                GM_setValue("userTeam", "none");
-            }
-            GM_setValue("backscoreRedAbr", document.getElementsByTagName("input").redTeamName.value);
-            GM_setValue("backscoreBlueAbr", document.getElementsByTagName("input").blueTeamName.value);
-            GM_setValue("groupMap", document.getElementsByTagName("select").map.value);
-            GM_setValue("groupTime", document.getElementsByTagName("select").time.value);
-            GM_setValue("groupCapLimit", document.getElementsByTagName("select").caps.value);
-            if (tagpro.group.players[GM_getValue("tpUserId", undefined)]) {
-                GM_setValue("backscorePlayer", encodeURIComponent(tagpro.group.players[GM_getValue("tpUserId", undefined)].name + " (" + checkVersion + ")"));
-            } else {
-                GM_setValue("backscorePlayer", encodeURIComponent("Some Ball (" + checkVersion + ")"));
-            }
-            var scriptCheck = false; // check if no script is enabled
-            var warnCheck = false; // check if respawn warnings are disabled
-            var extraSettingsNum = document.getElementsByClassName("extra-setting").length;
-            for (var i = 0; i < extraSettingsNum; i++) {
-                var extraSetting = document.getElementsByClassName("extra-setting")[i].innerText;
-                if (extraSetting == "× User Scripts Disable" || extraSetting == "User Scripts Disable") {
-                    scriptCheck = true;
-                } else if (extraSetting == "× Respawn Warnings Disable" || extraSetting == "Respawn Warnings Disable") {
-                    warnCheck = true;
-                }
-            }
-            if (scriptCheck === true && warnCheck === true) {
-                GM_setValue("compCheck", true);
-                getJerseys();
-            } else {
-                GM_setValue("compCheck", false);
-            }
-        });
         var checkVersion = GM_getValue("tpcsCurrentVer",0);
         if (checkVersion != GM_info.script.version || GM_getValue("tpcsConfirmation", false) === false) {
             checkVersion = GM_info.script.version;
@@ -466,7 +431,50 @@ function groupReady(isLeader) { // grab necessary info from the group
             var updateNotes = "The TagPro Competitive Stats Userscript has been updated to V" + GM_info.script.version + "!\nHere is a summary of updates:\n1. Refactored leader code to allow swapping between leader/spectator\n2. increased timeout for group functions\n3. Added ability to save game data locally\n4. Fixed incorrect executions of capUpdate function\n5. Reimplement checkLeader function\n6. Added ability to show update notes in userscript\nClicking Ok means you accept the changes to this script and the corresponding privacy policy.\nThe full privacy policy and change log can be found by going to the script homepage through the Tampermonkey menu."
             GM_setValue("tpcsConfirmation", window.confirm(updateNotes));
         }
+        socket.on("play", function() { // play event
+            groupEscape(group, checkVersion); // groupEscape grabs the necessary data from the group page
+        });
+        document.getElementById("join-game-btn").onclick = function() { // join button, or player enters game late
+            // note: If a player enters the game late using the join game button, any stats they send when they leave will be marked incomplete due to time.
+			// This can be corrected on the server side.
+            groupEscape(group, checkVersion);
+        };
     });
+}
+
+function groupEscape(group, checkVersion) {
+    if (typeof group != "undefined" && typeof group.self != "undefined" && typeof group.players != "undefined") {
+        GM_setValue("userTeam", group.players[group.self].team);
+    } else if (typeof group.self == "undefined") {
+        GM_setValue("userTeam", "none");
+    }
+    GM_setValue("backscoreRedAbr", document.getElementsByTagName("input").redTeamName.value);
+    GM_setValue("backscoreBlueAbr", document.getElementsByTagName("input").blueTeamName.value);
+    GM_setValue("groupMap", document.getElementsByTagName("select").map.value);
+    GM_setValue("groupTime", document.getElementsByTagName("select").time.value);
+    GM_setValue("groupCapLimit", document.getElementsByTagName("select").caps.value);
+    if (tagpro.group.players[GM_getValue("tpUserId", undefined)]) {
+        GM_setValue("backscorePlayer", encodeURIComponent(tagpro.group.players[GM_getValue("tpUserId", undefined)].name + " (" + checkVersion + ")"));
+    } else {
+        GM_setValue("backscorePlayer", encodeURIComponent("Some Ball (" + checkVersion + ")"));
+    }
+    var scriptCheck = false; // check if no script is enabled
+    var warnCheck = false; // check if respawn warnings are disabled
+    var extraSettingsNum = document.getElementsByClassName("extra-setting").length;
+    for (var i = 0; i < extraSettingsNum; i++) {
+        var extraSetting = document.getElementsByClassName("extra-setting")[i].innerText;
+        if (extraSetting == "× User Scripts Disable" || extraSetting == "User Scripts Disable") {
+            scriptCheck = true;
+        } else if (extraSetting == "× Respawn Warnings Disable" || extraSetting == "Respawn Warnings Disable") {
+            warnCheck = true;
+        }
+    }
+    if (scriptCheck === true && warnCheck === true) {
+        GM_setValue("compCheck", true);
+        getJerseys();
+    } else {
+        GM_setValue("compCheck", false);
+    }
 }
 
 function leaderReady() {
