@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.36a
+// @version        0.3602
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -32,7 +32,8 @@
 console.log(GM_info.script.name + ' active (Version: ' + GM_info.script.version + ')');
 
 // Start Script (Group functions)
-if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g*-*[ 0-z]*$/)) { // This gets your unique ID to determine which team you are in the group
+if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g*-*[ 0-z]*$/))
+{ // This gets your unique ID to determine which team you are in the group
     //This is separate from the main functions because the 'you' event may get sent before the rest of the script has loaded
     tagpro.ready(function() {
         tagpro.group.socket.on("you", function(p) {
@@ -41,37 +42,59 @@ if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g
     });
 }
 
-document.onreadystatechange = () => {
-    if (document.readyState === "complete") {
-        setTimeout(function() {
-            if (window.location.href.split(".com")[1].match(/^\/groups\/#[crt]g-*[ 0-z]*$/)) { // If #cg/#tg/#rg is passed through, creates new group with competitive settings
-                if (window.location.href.split(new RegExp("-", "gi")).length == 3) {
-                    GM_setValue("setMap", window.location.href.split("-")[2]); // sets a global var to remember the map name passed through
-                }
-                if (window.location.href.indexOf("#tg") >= 0) { // If #tg is passed through, change abbr to the right tournament
-                    setTournament(window.location.href.split("-")[1].split(".")[0]);
-                }
-                document.getElementsByTagName("input")[1].checked = false; // ensures private group
-                GM_setValue("makepug", true); // makepug is the flag to automatically set competitive settings
-                document.getElementById("create-group-btn").click(); // create group
-            } else if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g*-*[ 0-z]*$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length > 0) {
-                // the fancy stuff for the first condition allows for a map to be passed in
-                leaderReady();
-                groupReady(true);
-            } else if (window.location.pathname.match(/^\/groups\/[a-z]{8}$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length === 0) { // non-leader in group
-                // spectator shouldn't need arguments, so there's no need to parse group type/map choice
-                GM_setValue("groupId", window.location.href.split("/")[4]);
-                console.log("Spectator/Player detected, skipping group setup");
-                groupReady(false);
-            }
-        }, 300);
-    }
-};
-
-// In Game Functions
 (function(window) {
     'use strict';
-    if (!window.tagpro && window.location.port >= 8000) { //comp game is detected when the tagpro object does not exist
+    if (!!window.tagpro)
+    {
+        var tagpro = window.tagpro;
+    }
+    // Group Functions, or the functions which run when user is on the group page
+    if (window.location.href.split(".com")[1].match(/^\/groups\/#[crt]g-*[ 0-z]*$/))
+    { // If #cg/#tg/#rg is passed through, creates new group with competitive settings
+        if (window.location.href.split(new RegExp("-", "gi")).length == 3)
+        {
+            GM_setValue("setMap", window.location.href.split("-")[2]); // sets a global var to remember the map name passed through
+        }
+        if (window.location.href.indexOf("#tg") >= 0)
+        { // If #tg is passed through, change abbr to the right tournament
+            setTournament(window.location.href.split("-")[1].split(".")[0]);
+        }
+        document.getElementsByTagName("input")[1].checked = false; // ensures private group
+        GM_setValue("makepug", true); // makepug is the flag to automatically set competitive settings
+        document.getElementById("create-group-btn").click(); // create group
+    }
+    else if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g*-*[ 0-z]*$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length > 0)
+    { // the fancy stuff for the first condition allows for a map to be passed in
+        leaderReady(); // runs function to set up leader stuff
+        groupReady(true); // runs function to grab group info
+    }
+    else if (window.location.pathname.match(/^\/groups\/[a-z]{8}$/) && Array.apply(null, document.getElementsByClassName("js-leader")).length === 0)
+    { // non-leader in group
+        // spectator shouldn't need arguments, so there's no need to parse group type/map choice
+        GM_setValue("groupId", window.location.href.split("/")[4]); // the leader function already sets groupId, so there's no need to set it again
+        console.log("Spectator/Player detected, skipping group setup");
+        groupReady(false); // runs function to grab group info
+		var redundantCount = 0;
+        var redundantLeadCheck = setInterval(function () { // Recheck for leader every half second for ten seconds in case leader functions didn't load
+            if (Array.apply(null, document.getElementsByClassName("js-leader")).length > 0)
+            {
+                changeLeader(true);
+                window.clearInterval(redundantLeadCheck);
+            }
+			else if (redundantCount > 20)
+			{
+				window.clearInterval(redundantLeadCheck);
+			}
+			else
+			{
+                redundantCount++;
+			}
+        }, 500);
+    }
+    // Game functions, or functions which run when user is in game
+    if (!window.tagpro && window.location.port >= 8000)
+    { //comp game is detected when the tagpro object does not exist and port is game eligible (i.e. greater than 8000)
+        // Because the tagpro object is not defined, this already defines a comp eligible game, so there's no need for redundant checks
         var groupServer = window.location.href.split("-")[1].split(".")[0];
         var userTeam = GM_getValue("userTeam", "none");
         GM_setValue("userTeam", "none");
@@ -84,44 +107,61 @@ document.onreadystatechange = () => {
         var updateRedCaps = 0; //auto is guessed from sound events, so it can't be trusted completely [used for cap updates]
         var updateBlueCaps = 0;
         var firstSound = true;
-        var tableExport = [];
-        var scoreboardCaps = [0, 0];
-        var teamNum = [];
+        var tableExport = []; // tableExport will send the scoreboard data
+        var scoreboardCaps = [0, 0]; // scoreboard caps keeps count of each team's caps
+        var teamNum = []; // teamNum represents the team of each player: Red = 1 and Blue = 2
         var sendCheck = GM_getValue("tpcsConfirmation", false);
         var localCheck = GM_getValue("backLocalStorage", false);
         document.getElementById("cheering").addEventListener("play", goodCap, false); //Note: play event does not activate if sounds are muted
         document.getElementById("sigh").addEventListener("play", badCap, false); // However, play event does activate is volume is set to 0 (but no mute)
+        // these functions are inside the block instead of outside the script since I don't know how else to do it
         function goodCap() {
-            if (firstSound === true) { //the first cheering sound starts the game, so don't increment cap counter
+            if (firstSound === true)
+            { //the first cheering sound starts the game, so don't increment cap counter
                 console.log("Start of comp game detected");
                 var x = new Date();
                 startTime = (Math.floor(x.getTime() / 1000) + x.getTimezoneOffset() * 60); // gets start time in UTC to avoid timezone confusion
-            } else if (userTeam == 1) { // adds cap to Red team
+            }
+            else if (userTeam == 1)
+            { // adds cap to Red team
                 updateRedCaps += 1;
-            } else if (userTeam == 2) { // adds cap to Blue team
+            }
+            else if (userTeam == 2)
+            { // adds cap to Blue team
                 updateBlueCaps += 1;
             }
-            if ((userTeam == 1 || userTeam == 2) && (updateRedCaps != 0 || updateBlueCaps != 0 || firstSound === true)) {
-                if (sendCheck === true) {
+            if ((userTeam == 1 || userTeam == 2) && (updateRedCaps != 0 || updateBlueCaps != 0 || firstSound === true))
+            { // enter the cap update if the above scenarios are met
+                if (sendCheck === true)
+                { // if the user has allowed sending data, send cap update
                     capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
                 }
-                firstSound = false;
+                if (firstSound === true)
+                {
+                    firstSound = false;
+                }
             }
         }
         function badCap() {
-            if (userTeam == 1) {
+            if (userTeam == 1)
+            { // adds cap to Blue team
                 updateBlueCaps += 1;
-            } else if (userTeam == 2) {
+            }
+            else if (userTeam == 2)
+            { // adds cap to Red team
                 updateRedCaps += 1;
             }
-            if (userTeam == 1 || userTeam == 2) {
-                if (sendCheck === true) {
+            if (userTeam == 1 || userTeam == 2)
+            { // enter the cap update if the above scenarios are met
+                if (sendCheck === true)
+                { // if the user has allowed sending data, send cap update
                     capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
                 }
             }
         }
         setInterval(function() {
-            if (document.getElementById("options").style.display == "block") {
+            if (document.getElementById("options").style.display == "block")
+            { // If the table is open, save stats
                 var playerStats = getStats(); // This was split into a function because I'm trying to see if the stats table can be updated without having the table open
                 tableExport = playerStats[0];
                 teamNum = playerStats[1];
@@ -130,10 +170,13 @@ document.onreadystatechange = () => {
             }
         }, 100); // update ten times per second
         document.onkeydown = function() { // This function sends a backup of the scoreboard in case partial stats are needed or stats need to be recreated.
-            if (event.keyCode == 27) { // 27 corresponds to escape key
+            if (event.keyCode == 27)
+            { // 27 corresponds to escape key
                 setTimeout(function() { // setTimeout is used to ensure the scoreboard is updated before the stats get sent
-                    if (document.getElementById("options").style.display == "block") { // checks if scoreboard is open
-                        if (sendCheck === true) {
+                    if (document.getElementById("options").style.display == "block")
+                    { // checks if scoreboard is open
+                        if (sendCheck === true)
+                        { // sends partial stats if the user has allowed sending data
                             capUpdate(backscoreRedCaps, backscoreBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer);
                         }
                     }
@@ -141,52 +184,62 @@ document.onreadystatechange = () => {
             }
         };
         window.onbeforeunload = function() { //send stats before exiting the game
-            if (typeof(backscoreRedCaps) == "undefined") { // undefined happens when there is no player on a team, so redefine to 0.
+            if (typeof(backscoreRedCaps) == "undefined")
+            { // undefined happens when there is no player on a team, so redefine to 0.
                 backscoreRedCaps = 0;
             }
-            if (typeof(backscoreBlueCaps) == "undefined") {
+            if (typeof(backscoreBlueCaps) == "undefined")
+            {
                 backscoreBlueCaps = 0;
             }
-            if (sendCheck === true && localCheck === false) { // send stats, but do not save locally
+            if (sendCheck === true && localCheck === false)
+            { // send stats, but do not save locally
                 submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, false, 0);
             }
-            else if (sendCheck === true && localCheck === true) { // send stats AND save locally
+            else if (sendCheck === true && localCheck === true)
+            { // send stats AND save locally
                 submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, false, 1);
             }
-            else { // only save stats locally
+            else
+            { // only save stats locally
                 submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, startTime, groupPort, groupServer, false, 2);
             }
         };
     } else if (GM_getValue("compCheck", false) === true && window.location.port >= 8000) { // Spectator mode
-        GM_setValue("compCheck", false); // Set comp check to false to avoid accidentally triggering spec mode
-        // note that this means refreshing in game as a spectator will prevent spectator mode from activating.
+        // A check is needed here because there is no difference between this and a regular public game
         var specServer = window.location.href.split("-")[1].split(".")[0];
         var specGroupPort = window.location.port;
         var ma = new Date();
         var specStartTime = (Math.floor(ma.getTime() / 1000) + ma.getTimezoneOffset() * 60) + 20; // set redundant start time
         var specRedCaps = 0;
         var specBlueCaps = 0;
-        var endSubmit = false;
+        var endSubmit = false; // endSubmit is a flag for the end event
         var firstUpdate = false;
         var specUpdateCheck = GM_getValue("tpcsConfirmation", false);
         var specLocalCheck = GM_getValue("backLocalStorage", false);
         console.log("TagPro Competitive Stats is now running in Spectator mode on port " + window.location.port);
         tagpro.ready(function() {
-            if ((GM_getValue("backRedJersey", false) || GM_getValue("backBlueJersey", false)) && GM_getValue("backJerseyFlag", true)) { // adapted version of Some Ball -1's jersey script
-                var red = GM_getValue("backRedJersey");
+            if ((GM_getValue("backRedJersey", false) || GM_getValue("backBlueJersey", false)) && GM_getValue("backJerseyFlag", true))
+            { // adapted version of Some Ball -1's jersey script
+                var red = GM_getValue("backRedJersey"); // grab jersey data from the group
                 var blue = GM_getValue("backBlueJersey");
-                var jersey = [red === "none" ? false : red, blue === "none" ? false : blue, GM_getValue("ballRedTrans", 1), GM_getValue("ballBlueTrans", 1), GM_getValue("jerseyRedTrans", 1), GM_getValue("jerseyBlueTrans", 1)];
-                if (jersey[0] || jersey[1]) {
+                var jersey = [red === "none" ? false : red, blue === "none" ? false : blue, GM_getValue("ballRedTrans", 1), GM_getValue("ballBlueTrans", 1), GM_getValue("jerseyRedTrans", 1), GM_getValue("jerseyBlueTrans", 1)]; // set an array for jersey data for easy processing
+                if (jersey[0] || jersey[1])
+                { // If either team has jerseys, get the jersey image
                     var tr = tagpro.renderer,
                         oldUPSP = tr.updatePlayerSpritePosition;
                     tr.createJersey = function(player) {
-                        if (!jersey[player.team - 1]) { //make empty container if one team doesn't have a jersey
+                        if (!jersey[player.team - 1])
+                        { // make empty container if one team doesn't have a jersey
                             if (player.sprites.jersey) player.sprites.ball.removeChild(player.sprites.jersey);
                             player.sprites.jersey = new PIXI.DisplayObjectContainer();
                             player.sprites.jersey.team = player.team;
                             player.sprites.ball.addChildAt(player.sprites.jersey, 1);
-                        } else {
-                            if (player.sprites.jersey) {
+                        }
+                        else
+                        { // make container for jersey
+                            if (player.sprites.jersey)
+                            {
                                 player.sprites.ball.removeChild(player.sprites.jersey);
                             }
                             player.sprites.jersey = new PIXI.Sprite(PIXI.Texture.fromImage("http://i.imgur.com/" + jersey[player.team - 1] + ".png"));
@@ -196,79 +249,98 @@ document.onreadystatechange = () => {
                             player.sprites.jersey.anchor.y = 0.5;
                             player.sprites.jersey.x = 20;
                             player.sprites.jersey.y = 20;
-                            if (jersey[player.team + 1] < 1 && jersey[player.team + 1] >= 0) { // set transparency value for actual ball
+                            if (jersey[player.team + 1] < 1 && jersey[player.team + 1] >= 0)
+                            { // set transparency value for actual ball
                                 player.sprites.actualBall.alpha = jersey[player.team + 1];
-                            } else { // reset
+                            }
+                            else
+                            { // reset
                                 player.sprites.actualBall.alpha = 1;
                             }
-                            if (jersey[player.team + 3] < 1 && jersey[player.team + 3] >= 0) { // set transparency value for jersey
+                            if (jersey[player.team + 3] < 1 && jersey[player.team + 3] >= 0)
+                            { // set transparency value for jersey
                                 player.sprites.jersey.alpha = jersey[player.team + 3];
-                            } else { // reset
+                            }
+                            else
+                            { // reset
                                 player.sprites.jersey.alpha = 1;
                             }
                         }
                     };
                     tr.updatePlayerSpritePosition = function(player) {
-                        if (!player.sprites.jersey) {
+                        if (!player.sprites.jersey)
+                        {
                             tr.createJersey(player);
                         }
-                        if (player.sprites.jersey.team !== player.team) {
+                        if (player.sprites.jersey.team !== player.team)
+                        {
                             tr.createJersey(player);
                         }
                         var index = player.sprites.ball.getChildIndex(player.sprites.actualBall) + 1;
-                        if (index !== player.sprites.ball.getChildIndex(player.sprites.jersey)) {
+                        if (index !== player.sprites.ball.getChildIndex(player.sprites.jersey))
+                        {
                             player.sprites.ball.setChildIndex(player.sprites.jersey, index);
                         }
-                        if (GM_getValue("backJerseySpin", true)) {
+                        if (GM_getValue("backJerseySpin", true))
+                        {
                             player.sprites.jersey.rotation = player.angle;
                         }
                         oldUPSP(player);
                     };
                 }
             }
-
-            function setStartTime() {
-                var tempStartTime = Math.floor(tagpro.gameEndsAt.getTime() / 1000) + tagpro.gameEndsAt.getTimezoneOffset() * 60;
-                if (tempStartTime <= specStartTime + 10) { // If you're in the 20 second waiting period, tagpro.gameEndsAt will return when the game starts
-                    // A 10 second buffer is added for people who have faster balls
+            setTimeout(function () {
+                var tempStartTime = Math.floor(tagpro.gameEndsAt.getTime() / 1000) + tagpro.gameEndsAt.getTimezoneOffset() * 60; // returns UTC
+                if (tempStartTime <= specStartTime + 10)
+                { // If you're in the 20 second waiting period, tagpro.gameEndsAt will return when the game starts
+                    // A 10 second buffer is added for people who have faster balls.
+                    // Note that the 10 second buffer does not affect which statement is triggered since if the user is in game, gameEndsAt will return a completely different time.
                     specStartTime = tempStartTime;
-                } else { // regular condition, subtract game length from designated end time
+                }
+                else
+                { // user is in game, subtract game length from designated end time
                     specStartTime = tempStartTime - (parseInt(GM_getValue("groupTime", "10")) * 60);
                 }
                 var currentId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
                 var capStats = getSpecStats(currentId);
-                if (specUpdateCheck === true) {
-                    capUpdate(tagpro.score.r, tagpro.score.b, specStartTime, specGroupPort, capStats[0], capStats[1], specServer); // first update should come from here since it has the correct start time
+                if (specUpdateCheck === true)
+                { // the first cap update comes from here since it has the correct start time
+                    capUpdate(tagpro.score.r, tagpro.score.b, specStartTime, specGroupPort, capStats[0], capStats[1], specServer);
                 }
-            }
-            setTimeout(setStartTime, 1000); // tagpro.gameEndsAt is not immediately available, so ping a little after
+                firstUpdate = true;
+            }, 1000); // tagpro.gameEndsAt is not immediately available, so ping a little after
             tagpro.socket.on("score", function(data) { // Cap update condition
-                if (firstUpdate === true && (tagpro.score.r != 0 || tagpro.score.b != 0)) {
-                    if ('r' in data) {
+                if (firstUpdate === true && (tagpro.score.r != 0 || tagpro.score.b != 0))
+                { // score event gets spammed on occasion before the beginning of the game due to bad connection, so only process if caps are not zero
+                    if ('r' in data)
+                    { // process red
                         specRedCaps = data.r;
                     }
-                    if ('b' in data) {
+                    if ('b' in data)
+                    { // process blue
                         specBlueCaps = data.b;
                     }
                     var currentId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
                     var capStats = getSpecStats(currentId);
-                    if (specUpdateCheck === true) {
+                    if (specUpdateCheck === true)
+                    { // send data if user has allowed it
                         capUpdate(specRedCaps, specBlueCaps, specStartTime, specGroupPort, capStats[0], capStats[1], specServer);
                     }
-                } else {
-                    firstUpdate = true;
                 }
             });
-            tagpro.socket.on("end", function(data) { //  submit stats when the game ends
-                var finalId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
-                var specStats = getSpecStats(finalId);
-                if (specUpdateCheck === true && specLocalCheck === false) { // send stats, but do not save locally
+            tagpro.socket.on("end", function(data) { //  submit stats when the end event is sent by the server
+                var finalId = sortByScore(Object.getOwnPropertyNames(tagpro.players)); // sort IDs of players in the game by their score
+                var specStats = getSpecStats(finalId); // get the stats using finalId
+                if (specUpdateCheck === true && specLocalCheck === false)
+                { // send stats, but do not save locally
                     submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, true, 0);
                 }
-                else if (specUpdateCheck === true && specLocalCheck === true) { // send stats AND save locally
+                else if (specUpdateCheck === true && specLocalCheck === true)
+                { // send stats AND save locally
                     submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, true, 1);
                 }
-                else { // only save stats locally
+                else
+                { // only save stats locally
                     submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, true, 2);
                 }
                 endSubmit = true;
@@ -278,18 +350,23 @@ document.onreadystatechange = () => {
             });*/
         });
         window.onbeforeunload = function() { // sends stats if you leave the game for some reason before the end event, or if stats fail to send during the end event
-            GM_getValue("backRedJersey", false);
+            GM_setValue("compCheck", false); // Set comp check to false to avoid accidentally triggering spec mode
+            GM_getValue("backRedJersey", false); // Delete stored jersey data so it doesn't get triggered
             GM_getValue("backBlueJersey", false);
-            if (endSubmit === false) {
+            if (endSubmit === false)
+            {
                 var finalId = sortByScore(Object.getOwnPropertyNames(tagpro.players));
                 var specStats = getSpecStats(finalId);
-                if (specUpdateCheck === true && specLocalCheck === false) { // send stats, but do not save locally
+                if (specUpdateCheck === true && specLocalCheck === false)
+                { // send stats, but do not save locally
                     submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, false, 0);
                 }
-                else if (specUpdateCheck === true && specLocalCheck === true) { // send stats AND save locally
+                else if (specUpdateCheck === true && specLocalCheck === true)
+                { // send stats AND save locally
                     submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, false, 1);
                 }
-                else { // only save stats locally
+                else
+                { // only save stats locally
                     submitStats(specRedCaps, specBlueCaps, specStats[0], specStats[1], specStartTime, specGroupPort, specServer, false, 2);
                 }
             }
@@ -297,12 +374,13 @@ document.onreadystatechange = () => {
     }
 })(unsafeWindow);
 
-// Misc Functions
+// Misc Functions, alphabetical order by name of function
 function capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExport, teamNum, groupServer) { // send cap update
     var y = new Date();
     var currentTime = (Math.floor(y.getTime() / 1000) + y.getTimezoneOffset() * 60); // gets start time in UTC
     var backscoreUpdate = "https://docs.google.com/forms/d/e/1FAIpQLSe57NOVRdas-tzT4MZ8-XPSkNO3MyKCTrAOyFGXp4PtNQcdkQ/formResponse?entry.133949532=" + GM_getValue("backscoreRedAbr", "Red") + "&entry.454687569=" + GM_getValue("backscoreBlueAbr", "Blue") + "&entry.184122371=" + updateRedCaps + "&entry.1906941178=" + updateBlueCaps + "&entry.2120828603=" + groupServer + "&entry.1696460484=" + GM_getValue("groupId", "none") + "&entry.968816448=" + GM_getValue("groupMap", "none") + "&entry.1523561265=" + startTime + "&entry.1474408630=" + currentTime + "&entry.1681155627=" + groupPort + "&entry.1189129646=" + GM_getValue("groupTime", "none") + "&entry.197322272=" + GM_getValue("backscorePlayer", "Some%20Ball") + "&entry.2065162742=" + encodeURIComponent(tableExport.toString()) + "&entry.2098213735=" + teamNum.toString() + "&submit=Submit";
-    if (currentTime - startTime < GM_getValue("groupTime", 0) * 60 && GM_getValue("backscoreBlueAbr", "Blue") != "Blue" && GM_getValue("backscoreRedAbr", "Red") != "Red") {
+    if (currentTime - startTime < GM_getValue("groupTime", 0) * 60 && GM_getValue("backscoreBlueAbr", "Blue") != "Blue" && GM_getValue("backscoreRedAbr", "Red") != "Red")
+    { // don't send a cap update if any of the team names are default
         var capUpdateRequest = new XMLHttpRequest();
         capUpdateRequest.open("POST", backscoreUpdate);
         capUpdateRequest.send();
@@ -311,22 +389,28 @@ function capUpdate(updateRedCaps, updateBlueCaps, startTime, groupPort, tableExp
 }
 
 function changeLeader(status) {
-    if (status) {
-        if (!!document.getElementById("autoscoreLeague") && !!document.getElementById("redTeamAbr")) {
+    if (status)
+    { // status returns whether or not the user is the leader of the group
+        if (!!document.getElementById("autoscoreLeague") && !!document.getElementById("redTeamAbr"))
+        { // unhide leader elements if the user already had them loaded
             document.getElementById("autoscoreLeague").style.display = "block";
             document.getElementById("redTeamAbr").style.display = "block";
             document.getElementById("blueTeamAbr").style.display = "block";
-        } else {
+        }
+        else
+        { // if the leader elements are not loaded, run the leaderReady function
             leaderReady();
         }
-    } else {
+    }
+    else
+    { // changeLeader(false) only happens when the leader elements already exist, so hide leader elements
         document.getElementById("autoscoreLeague").style.display = "none";
         document.getElementById("redTeamAbr").style.display = "none";
         document.getElementById("blueTeamAbr").style.display = "none";
     }
 }
 
-function download(content, fileName, contentType) {
+function download(content, fileName, contentType) { // this function exports game data into a json file
     var a = document.createElement("a");
     var file = new Blob([content], {type: contentType});
     a.href = URL.createObjectURL(file);
@@ -338,20 +422,26 @@ function getJerseys() { // set jerseys for each team
     var specRedTeam = GM_getValue("backscoreRedAbr", "none");
     var specBlueTeam = GM_getValue("backscoreBlueAbr", "none");
     var teamJersey = GM_getValue("jerseyLinks");
-    if (teamJersey.hasOwnProperty(specRedTeam)) { // If jersey exists, set jersey
+    if (teamJersey.hasOwnProperty(specRedTeam))
+    { // If jersey exists, set jersey
         GM_setValue("backRedJersey", teamJersey[specRedTeam][0]);
         GM_setValue("ballRedTrans", teamJersey[specRedTeam][2]);
         GM_setValue("jerseyRedTrans", teamJersey[specRedTeam][4]);
-    } else { // otherwise, set to false to avoid issues
+    }
+    else
+    { // otherwise, set to false to avoid issues
         GM_setValue("backRedJersey", false);
         GM_setValue("ballRedTrans", 1);
         GM_setValue("jerseyRedTrans", 1);
     }
-    if (teamJersey.hasOwnProperty(specBlueTeam)) { // repeat for blue
+    if (teamJersey.hasOwnProperty(specBlueTeam))
+    { // repeat for blue
         GM_setValue("backBlueJersey", teamJersey[specBlueTeam][1]);
         GM_setValue("ballBlueTrans", teamJersey[specBlueTeam][3]);
         GM_setValue("jerseyBlueTrans", teamJersey[specBlueTeam][5]);
-    } else {
+    }
+    else
+    {
         GM_setValue("backBlueJersey", false);
         GM_setValue("ballBlueTrans", 1);
         GM_setValue("jerseyBlueTrans", 1);
@@ -361,8 +451,10 @@ function getJerseys() { // set jerseys for each team
 function getSpecStats(finalId) {
     var specExport = [];
     var specTeamExport = [];
-    for (var i in finalId) {
-        if (tagpro.players[finalId[i]]) {
+    for (var i in finalId)
+    {
+        if (tagpro.players[finalId[i]])
+        {
             var playerrow = [];
             var playerObject = tagpro.players[finalId[i]];
             playerrow = [playerObject.auth ? "✓" + playerObject.name : playerObject.name, playerObject.score, playerObject["s-tags"], playerObject["s-pops"], playerObject["s-grabs"], playerObject["s-drops"], timeFromSeconds(playerObject["s-hold"], true), playerObject["s-captures"], timeFromSeconds(playerObject["s-prevent"], true), playerObject["s-returns"], playerObject["s-support"], playerObject["s-powerups"]];
@@ -378,19 +470,27 @@ function getStats() {
     var tableExport = [];
     var scoreboardCaps = [0, 0];
     var teamNum = [];
-    for (var i = 2; i < statPlayers; i++) { // This part pushes the stats table into an array to be exported later.
+    for (var i = 2; i < statPlayers; i++)
+    { // This part pushes the stats table into an array to be exported later.
         var playerPush = [];
         var playerTeam = document.getElementsByTagName("table").stats.rows[i].getElementsByClassName("team-blue").length;
         teamNum.push(playerTeam + 1);
-        for (var j = 0; j <= 11; j++) {
+        for (var j = 0; j <= 11; j++)
+        {
             var editVal = document.getElementsByTagName("table").stats.rows[i].cells[j].innerText;
-            if (j == 0) {
-                if (editVal.substring(0, 1) == "✓") { // remove whitespace between checkmark and name
+            if (j == 0)
+            {
+                if (editVal.substring(0, 1) == "✓")
+                { // remove whitespace between checkmark and name
                     editVal = "✓".concat(editVal.substring(1).trim());
-                } else {
+                }
+                else
+                {
                     editVal = editVal.trim();
                 }
-            } else if (j == 7) { // add team caps
+            }
+            else if (j == 7)
+            { // add team caps
                 scoreboardCaps[playerTeam] += parseInt(editVal);
             }
             playerPush.push(editVal);
@@ -425,7 +525,8 @@ function groupReady(isLeader) { // grab necessary info from the group
             }
         });
         var checkVersion = GM_getValue("tpcsCurrentVer",0);
-        if (checkVersion != GM_info.script.version || GM_getValue("tpcsConfirmation", false) === false) {
+        if (checkVersion != GM_info.script.version || GM_getValue("tpcsConfirmation", false) === false)
+        {
             checkVersion = GM_info.script.version;
             GM_setValue("tpcsCurrentVer",checkVersion);
             var updateNotes = "The TagPro Competitive Stats Userscript has been updated to V" + GM_info.script.version + "!\nHere is a summary of updates:\n1. Refactored leader code to allow swapping between leader/spectator\n2. increased timeout for group functions\n3. Added ability to save game data locally\n4. Fixed incorrect executions of capUpdate function\n5. Reimplement checkLeader function\n6. Added ability to show update notes in userscript\nClicking Ok means you accept the changes to this script and the corresponding privacy policy.\nThe full privacy policy and change log can be found by going to the script homepage through the Tampermonkey menu."
@@ -436,16 +537,19 @@ function groupReady(isLeader) { // grab necessary info from the group
         });
         document.getElementById("join-game-btn").onclick = function() { // join button, or player enters game late
             // note: If a player enters the game late using the join game button, any stats they send when they leave will be marked incomplete due to time.
-			// This can be corrected on the server side.
+            // This can be corrected on the server side if needed.
             groupEscape(group, checkVersion);
         };
     });
 }
 
 function groupEscape(group, checkVersion) {
-    if (typeof group != "undefined" && typeof group.self != "undefined" && typeof group.players != "undefined") {
+    if (typeof group != "undefined" && typeof group.self != "undefined" && typeof group.players != "undefined")
+    {
         GM_setValue("userTeam", group.players[group.self].team);
-    } else if (typeof group.self == "undefined") {
+    }
+    else if (typeof group.self == "undefined")
+    {
         GM_setValue("userTeam", "none");
     }
     GM_setValue("backscoreRedAbr", document.getElementsByTagName("input").redTeamName.value);
@@ -453,9 +557,12 @@ function groupEscape(group, checkVersion) {
     GM_setValue("groupMap", document.getElementsByTagName("select").map.value);
     GM_setValue("groupTime", document.getElementsByTagName("select").time.value);
     GM_setValue("groupCapLimit", document.getElementsByTagName("select").caps.value);
-    if (tagpro.group.players[GM_getValue("tpUserId", undefined)]) {
+    if (tagpro.group.players[GM_getValue("tpUserId", undefined)])
+    { // set the name of the user based on their name in group
         GM_setValue("backscorePlayer", encodeURIComponent(tagpro.group.players[GM_getValue("tpUserId", undefined)].name + " (" + checkVersion + ")"));
-    } else {
+    }
+    else
+    { // if the group var is corrupt, set name to Some Ball
         GM_setValue("backscorePlayer", encodeURIComponent("Some Ball (" + checkVersion + ")"));
     }
     var scriptCheck = false; // check if no script is enabled
@@ -463,31 +570,42 @@ function groupEscape(group, checkVersion) {
     var extraSettingsNum = document.getElementsByClassName("extra-setting").length;
     for (var i = 0; i < extraSettingsNum; i++) {
         var extraSetting = document.getElementsByClassName("extra-setting")[i].innerText;
-        if (extraSetting == "× User Scripts Disable" || extraSetting == "User Scripts Disable") {
+        if (extraSetting == "× User Scripts Disable" || extraSetting == "User Scripts Disable")
+        {
             scriptCheck = true;
-        } else if (extraSetting == "× Respawn Warnings Disable" || extraSetting == "Respawn Warnings Disable") {
+        }
+        else if (extraSetting == "× Respawn Warnings Disable" || extraSetting == "Respawn Warnings Disable")
+        {
             warnCheck = true;
         }
     }
-    if (scriptCheck === true && warnCheck === true) {
+    if (scriptCheck === true && warnCheck === true)
+    {
         GM_setValue("compCheck", true);
         getJerseys();
-    } else {
+    }
+    else
+    {
         GM_setValue("compCheck", false);
     }
 }
 
 function leaderReady() {
     console.log("Group leader detected, setting up group");
-    if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg*-*[0-z]*$/)) { // set up tournament abbreviations if #tg is passed through
+    if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg*-*[0-z]*$/))
+    { // set up tournament abbreviations if #tg is passed through
         setTournament(window.location.href.split("-")[1].split(".")[0]);
     }
-    if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg-*[ 0-z]*$/) || GM_getValue("setMap", "none") != "none") { // set up map if passed through
+    if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/#tg-*[ 0-z]*$/) || GM_getValue("setMap", "none") != "none")
+    { // set up map if passed through
         var mapName = "";
         var mapList = document.getElementsByClassName("form-control js-socket-setting")[0];
-        if (GM_getValue("setMap", "none") == "none") { // map name is in the url
+        if (GM_getValue("setMap", "none") == "none")
+        { // map name is in the url
             mapName = window.location.href.split("-")[2].replace(" ", "_").toLowerCase();
-        } else { // map name is in "setMap"
+        }
+        else
+        { // map name is in "setMap"
             mapName = GM_getValue("setMap", "none").replace(" ", "_").toLowerCase();
         }
         GM_setValue("setMap", "none");
@@ -533,17 +651,20 @@ function leaderReady() {
         var map = mapNameKey[mapName] || ""; // defaults to random if the map name is not found
         tagpro.group.socket.emit("setting", {name: "map", value: map}); // syncs map change to server
     }
-    if (GM_getValue("makepug", false) === true) { // If the group has been passed through with a toggle, automatically set competitive settings
+    if (GM_getValue("makepug", false) === true)
+    { // If the group has been passed through with a toggle, automatically set competitive settings
         console.log("Automated new group detected, setting comp settings");
         document.getElementById("pug-btn").click();
         document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click();
         GM_setValue("makepug", false);
     }
-    if (GM_getValue("groupId", "none") != window.location.href.split("/")[4]) {
+    if (GM_getValue("groupId", "none") != window.location.href.split("/")[4])
+    {
         console.log("New group detected");
         document.getElementById("pug-btn").onclick = function() { // Makes group a private game
             console.log("Private group detected, setting up comp settings");
-            if (document.getElementsByName("competitiveSettings")[0].checked == false) {
+            if (document.getElementsByName("competitiveSettings")[0].checked == false)
+            {
                 document.getElementsByClassName("btn btn-default group-assignment group-setting competitive-settings")[0].click(); // Turns on competitive settings
             }
         }
@@ -564,37 +685,53 @@ function leaderReady() {
         GM_setValue("autoscoreAbr", abbrRequest.response);
         var array = abbrRequest.response.Leagues;
         array.push("TagPro Competitive Stats Settings");
-        if (GM_getValue("backJerseyFlag", true) === true) {
+        if (GM_getValue("backJerseyFlag", true) === true)
+        {
             array.push("Disable Jerseys [Currently Enabled]");
-        } else {
+        }
+        else
+        {
             array.push("Enable Jerseys [Currently Disabled]");
         }
-        if (GM_getValue("backJerseySpin", true) === true) {
+        if (GM_getValue("backJerseySpin", true) === true)
+        {
             array.push("Disable Jersey Spin [Currently Enabled]");
-        } else {
+        }
+        else
+        {
             array.push("Enable Jersey Spin [Currently Disabled]");
         }
-        if (GM_getValue("backLocalStorage", false) === true) {
+        if (GM_getValue("backLocalStorage", false) === true)
+        {
             array.push("Disable Saving Local Stats [Currently Enabled]");
-        } else {
+        }
+        else
+        {
             array.push("Enable Saving Local Stats [Currently Disabled]");
         }
-        for (var i = 0; i < array.length; i++) { // Fill in the league selector with the leagues in the json
+        for (var i = 0; i < array.length; i++)
+        { // Fill in the league selector with the leagues in the json
             var option;
             var headerList = ["NA Competitive", "NA Tournaments", "EU Competitive", "OC Competitive", "TagPro Competitive Stats Settings"];
-            if (headerList.indexOf(array[i]) >= 0) { // these are headers
+            if (headerList.indexOf(array[i]) >= 0)
+            { // these are headers
                 option = document.createElement("optgroup");
                 option.label = array[i];
-            } else {
+            }
+            else
+            {
                 option = document.createElement("option");
                 option.value = array[i];
                 option.text = array[i];
             }
             selectList.appendChild(option);
         }
-        if (abbrRequest.response.Leagues.indexOf(GM_getValue("autoscoreImport", "None")) > -1) { // Standard Import Condition
+        if (abbrRequest.response.Leagues.indexOf(GM_getValue("autoscoreImport", "None")) > -1)
+        { // Standard Import Condition
             selectList.value = GM_getValue("autoscoreImport", "None");
-        } else { // This happens when the league has been removed from the teams json, usually because the season is over or league is dead
+        }
+        else
+        { // This happens when the league has been removed from the teams json, usually because the season is over or league is dead
             selectList.value = "None";
         }
         updateTeamAbr();
@@ -606,33 +743,54 @@ function leaderReady() {
 
 function openSettings(setting) {
     var newSetting = "";
-    if (setting == "Disable Jerseys [Currently Enabled]") {
+    if (setting == "Disable Jerseys [Currently Enabled]")
+    {
         GM_setValue("backJerseyFlag", false);
         newSetting = "Enable Jerseys [Currently Disabled]";
-    } else if (setting == "Enable Jerseys [Currently Disabled]") {
+    }
+    else if (setting == "Enable Jerseys [Currently Disabled]")
+    {
         GM_setValue("backJerseyFlag", true);
         newSetting = "Disable Jerseys [Currently Enabled]";
-    } else if (setting == "Disable Jersey Spin [Currently Enabled]") {
+    }
+    else if (setting == "Disable Jersey Spin [Currently Enabled]")
+    {
         GM_setValue("backJerseySpin", false);
         newSetting = "Enable Jersey Spin [Currently Disabled]";
-    } else if (setting == "Enable Jersey Spin [Currently Disabled]") {
+    }
+    else if (setting == "Enable Jersey Spin [Currently Disabled]")
+    {
         GM_setValue("backJerseySpin", true);
         newSetting = "Disable Jersey Spin [Currently Enabled]";
-    } else if (setting == "Enable Saving Local Stats [Currently Disabled]") {
+    }
+    else if (setting == "Enable Saving Local Stats [Currently Disabled]")
+    {
         GM_setValue("backLocalStorage", true);
         newSetting = "Disable Saving Local Stats [Currently Enabled]";
-    } else if (setting == "Disable Saving Local Stats [Currently Enabled]") {
+    }
+    else if (setting == "Disable Saving Local Stats [Currently Enabled]")
+    {
         GM_setValue("backLocalStorage", false);
         newSetting = "Enable Saving Local Stats [Currently Disabled]";
     }
     var updateSettingsArray = document.getElementById("autoscoreLeague").getElementsByTagName("option");
-    for (var i = updateSettingsArray.length - 1; i >= 0; i--) { // loop backwards in the league selector array to update setting text
-        if (updateSettingsArray[i].value == setting) {
+    for (var i = updateSettingsArray.length - 1; i >= 0; i--)
+    { // loop backwards in the league selector array to update setting text
+        if (updateSettingsArray[i].value == setting)
+        {
             updateSettingsArray[i].value = newSetting;
             updateSettingsArray[i].text = newSetting;
             break;
         }
     }
+}
+
+//stolen from tagpro client code
+function pad(t, e) {
+    t = t.toString();
+    var i = (e = e.toString()) + t,
+        o = e.length > t.length ? e.length : t.length;
+    return i.substr(i.length - o);
 }
 
 function setTournament(tournamentServer) { // change abbreviations to match the default tournament of the server
@@ -678,27 +836,37 @@ function submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, 
     var endTime = (Math.floor(z.getTime() / 1000) + z.getTimezoneOffset() * 60); // gets end time in UTC
     var backscoreLink = "https://docs.google.com/forms/d/e/1FAIpQLSe57NOVRdas-tzT4MZ8-XPSkNO3MyKCTrAOyFGXp4PtNQcdkQ/formResponse?entry.133949532=" + GM_getValue("backscoreRedAbr", "Red") + "&entry.454687569=" + GM_getValue("backscoreBlueAbr", "Blue") + "&entry.184122371=" + backscoreRedCaps + "&entry.1906941178=" + backscoreBlueCaps + "&entry.2120828603=" + groupServer + "&entry.1696460484=" + GM_getValue("groupId", "none") + "&entry.968816448=" + GM_getValue("groupMap", "none") + "&entry.2065162742=" + encodeURIComponent(tableExport.toString()) + "&entry.2098213735=" + teamNum.toString() + "&entry.1523561265=" + startTime + "&entry.1474408630=" + endTime + "&entry.1681155627=" + groupPort + "&entry.1189129646=" + GM_getValue("groupTime", "none") + "&entry.197322272=" + GM_getValue("backscorePlayer", "Some%20Ball");
     var groupCapLimit = GM_getValue("groupCapLimit", -1);
-    if (groupCapLimit == 0) {
+    if (groupCapLimit == 0)
+    {
         groupCapLimit = -1;
     }
-    if (endCheck === true) { // This occurs when a spectator reaches the end of the game and the 'end' event is activated
+    if (endCheck === true)
+    { // This occurs when a spectator reaches the end of the game and the 'end' event is activated
         submitRequest.open("POST", backscoreLink + "&entry.2031694514=" + "X" + "&submit=Submit");
         console.log("Game detected as complete [End event], stats submitted");
-    } else if (endTime - startTime > GM_getValue("groupTime", 0) * 60) { //This is the Time success condition, when stats are submitted after the game has ended
+    }
+    else if (endTime - startTime > GM_getValue("groupTime", 0) * 60)
+    { //This is the Time success condition, when stats are submitted after the game has ended
         submitRequest.open("POST", backscoreLink + "&entry.2031694514=" + "X" + "&submit=Submit");
         console.log("Game detected as complete [Time], stats submitted");
-    } else if (backscoreRedCaps == groupCapLimit || backscoreBlueCaps == groupCapLimit) { //This is the Cap success condition, when stats are submitted when cap limit is reached
+    }
+    else if (backscoreRedCaps == groupCapLimit || backscoreBlueCaps == groupCapLimit)
+    { //This is the Cap success condition, when stats are submitted when cap limit is reached
         submitRequest.open("POST", backscoreLink + "&entry.2031694514=" + "X" + "&submit=Submit");
         console.log("Game detected as complete [Cap Limit], stats submitted");
-    } else { //Everything else means something went wrong, i.e. game ended early or the you left the game early
+    }
+    else
+    { //Everything else means something went wrong, i.e. game ended early or the you left the game early
         submitRequest.open("POST", backscoreLink + "&submit=Submit");
         doneCheck = false;
         console.log("Game detected as incomplete, stats submitted");
     }
-    if (localCheck <= 1) { // send stats to server
+    if (localCheck <= 1)
+    { // send stats to server
         submitRequest.send();
     }
-    if (localCheck >= 1) { // save stats locally
+    if (localCheck >= 1)
+    { // save stats locally
         var dataJson = {
             "complete": doneCheck,
             "redTeamName": GM_getValue("backscoreRedAbr", "Red"),
@@ -717,10 +885,22 @@ function submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, 
     }
 }
 
+//stolen from tagpro client code
+function timeFromSeconds(t, e) {
+    if (0 == e) e = !1;
+    var i = pad;
+    t = parseFloat(t);
+    var o = parseInt(t / 3600),
+        n = t % 60,
+        r = i(parseInt(t / 60) % 60, "00") + ":" + i(n, "00");
+    return (!e || o > 0) && (r = i(o, "00") + ":" + r), r;
+}
+
 function updateTeamAbr() { // This function fills in the team abbreviations on the group page
     var abrJson = GM_getValue("autoscoreAbr");
     var settingsList = ["Disable Jerseys [Currently Enabled]", "Enable Jerseys [Currently Disabled]", "Disable Jersey Spin [Currently Enabled]", "Enable Jersey Spin [Currently Disabled]", "Disable Saving Local Stats [Currently Enabled]", "Enable Saving Local Stats [Currently Disabled]"];
-    if (settingsList.indexOf(document.getElementById("autoscoreLeague").value) >= 0) {
+    if (settingsList.indexOf(document.getElementById("autoscoreLeague").value) >= 0)
+    {
         openSettings(document.getElementById("autoscoreLeague").value);
         document.getElementById("autoscoreLeague").value = GM_getValue("autoscoreImport", "none");
         document.getElementById("autoscoreLeague").text = GM_getValue("autoscoreImport", "none");
@@ -733,10 +913,13 @@ function updateTeamAbr() { // This function fills in the team abbreviations on t
     var teamsLabels = [];
     var redTeamAbr;
     var blueTeamAbr;
-    if (!!document.getElementById("redTeamAbr")) {
+    if (!!document.getElementById("redTeamAbr"))
+    {
         redTeamAbr = document.getElementById("redTeamAbr");
         blueTeamAbr = document.getElementById("blueTeamAbr");
-    } else {
+    }
+    else
+    {
         redTeamAbr = document.createElement("select");
         blueTeamAbr = document.createElement("select");
         redTeamAbr.id = "redTeamAbr";
@@ -746,11 +929,13 @@ function updateTeamAbr() { // This function fills in the team abbreviations on t
         redTeamName.appendChild(redTeamAbr);
         blueTeamName.appendChild(blueTeamAbr);
     }
-    if (document.getElementById("redTeamAbr").style.display == "none") {
+    if (document.getElementById("redTeamAbr").style.display == "none")
+    {
         document.getElementById("redTeamAbr").style.display = "block";
         document.getElementById("blueTeamAbr").style.display = "block";
     }
-    switch (document.getElementById("autoscoreLeague").value) {
+    switch (document.getElementById("autoscoreLeague").value)
+    {
             // teams is the list which is shown on the group page
             // teamsLabels is the list of labels to help differentiate teams (usually server or conference)
             // teamsRaw is the list of abbreviations to put into the group
@@ -759,20 +944,31 @@ function updateTeamAbr() { // This function fills in the team abbreviations on t
         case "CLTP":
         case "Pipberry":
             var tourneyModifier;
-            if (document.getElementById("autoscoreLeague").value == "TToC") {
+            if (document.getElementById("autoscoreLeague").value == "TToC")
+            {
                 tourneyModifier = "T";
-            } else if (document.getElementById("autoscoreLeague").value == "RCL") {
+            }
+            else if (document.getElementById("autoscoreLeague").value == "RCL")
+            {
                 tourneyModifier = "R";
-            } else if (document.getElementById("autoscoreLeague").value == "CLTP") {
+            }
+            else if (document.getElementById("autoscoreLeague").value == "CLTP")
+            {
                 tourneyModifier = "C";
-            } else if (document.getElementById("autoscoreLeague").value == "Pipberry") {
+            }
+            else if (document.getElementById("autoscoreLeague").value == "Pipberry")
+            {
                 tourneyModifier = "Y";
             }
             teams = [""];
-            for (i = 1; i <= 24; i++) {
-                if (i < 10) {
+            for (i = 1; i <= 24; i++)
+            {
+                if (i < 10)
+                {
                     teams.push(tourneyModifier + "0" + i);
-                } else {
+                }
+                else
+                {
                     teams.push(tourneyModifier + i);
                 }
             }
@@ -792,19 +988,24 @@ function updateTeamAbr() { // This function fills in the team abbreviations on t
             teamsLabels = abrJson[GM_getValue("autoscoreImport")][1];
             break;
     }
-    while (redTeamAbr.firstChild) {
+    while (redTeamAbr.firstChild)
+    {
         redTeamAbr.removeChild(redTeamAbr.firstChild);
         blueTeamAbr.removeChild(blueTeamAbr.firstChild);
     }
-    for (var i = 0; i < teams.length; i++) {
+    for (var i = 0; i < teams.length; i++)
+    {
         var optionr;
         var optionb;
-        if (teamsLabels.indexOf(teams[i]) > -1) {
+        if (teamsLabels.indexOf(teams[i]) > -1)
+        {
             optionr = document.createElement("optgroup");
             optionb = document.createElement("optgroup");
             optionr.label = teams[i];
             optionb.label = teams[i];
-        } else {
+        }
+        else
+        {
             optionr = document.createElement("option");
             optionb = document.createElement("option");
             optionr.value = teams[i];
@@ -818,34 +1019,23 @@ function updateTeamAbr() { // This function fills in the team abbreviations on t
     redTeamAbr.className = "form-control js-socket-setting";
     blueTeamAbr.className = "form-control js-socket-setting";
     document.getElementById("redTeamAbr").onchange = function() {
-        if (document.getElementById("redTeamAbr").value.length <= 0) {
+        if (document.getElementById("redTeamAbr").value.length <= 0)
+        {
             tagpro.group.socket.emit("setting", { name: "redTeamName", value: "Red" });
-        } else {
+        }
+        else
+        {
             tagpro.group.socket.emit("setting", { name: "redTeamName", value: teamsRaw[teams.indexOf(redTeamAbr.value)] });
         }
     };
     document.getElementById("blueTeamAbr").onchange = function() {
-        if (document.getElementById("blueTeamAbr").value.length <= 0) {
+        if (document.getElementById("blueTeamAbr").value.length <= 0)
+        {
             tagpro.group.socket.emit("setting", { name: "blueTeamName", value: "Blue" });
-        } else {
+        }
+        else
+        {
             tagpro.group.socket.emit("setting", { name: "blueTeamName", value: teamsRaw[teams.indexOf(blueTeamAbr.value)] });
         }
     };
-}
-//stolen from tagpro client code
-function pad(t, e) {
-    t = t.toString();
-    var i = (e = e.toString()) + t,
-        o = e.length > t.length ? e.length : t.length;
-    return i.substr(i.length - o);
-}
-//stolen from tagpro client code
-function timeFromSeconds(t, e) {
-    if (0 == e) e = !1;
-    var i = pad;
-    t = parseFloat(t);
-    var o = parseInt(t / 3600),
-        n = t % 60,
-        r = i(parseInt(t / 60) % 60, "00") + ":" + i(n, "00");
-    return (!e || o > 0) && (r = i(o, "00") + ":" + r), r;
 }
