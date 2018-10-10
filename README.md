@@ -6,6 +6,8 @@ This userscript and the corresponding database of game data are not supported or
 
 **[Read the full Privacy Policy here.](https://docs.google.com/document/d/1wb4YO8zmcV9xtQYp_Hq3mrDEw2YPfThDukmT_sX1A1M/edit?usp=sharing)**
 
+Note on branches: Master is the branch where bug fixes and enhancements get implemented and tested. Stable is the public version which is currently used by the corresponding gist.
+
 ---
 
 ### [Download the userscript here](https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js)
