@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3609
+// @version        0.3610
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -714,6 +714,14 @@ function leaderReady() {
     buttonSettings.appendChild(selectList);
     selectList.className = "form-control js-socket-setting";
     selectList.style.margin = "1% 0%";
+	if (document.getElementById("pub-btn").offsetParent === null)
+	{
+		selectList.style.display = "none";
+	}
+	else
+	{
+		selectList.style.display = "block";
+	}
     selectList.title = "Click here to set a league for team abbreviations or change custom settings!";
     var abbrRequest = new XMLHttpRequest();
     abbrRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/teams.json"); // This json contains the abbreviations to use in group
@@ -807,6 +815,12 @@ function leaderReady() {
             }
         }
     }
+	document.getElementById("pub-btn").onclick = function() {
+		document.getElementById("autoscoreLeague").style.display = "none";
+	}
+	document.getElementById("pug-btn").onclick = function() {
+		document.getElementById("autoscoreLeague").style.display = "block";
+	}
 }
 
 function openSettings(setting) {
