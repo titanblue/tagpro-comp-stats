@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3605
+// @version        0.3606
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -784,7 +784,12 @@ function leaderReady() {
             var oldId = GM_getValue("launchGroupId","nones");
             var currentId = GM_getValue("groupId", "none")
             var oldTime = GM_getValue("checkTime",0);
-            if ((checkProcess - oldTime) >= (15*60) || currentId != oldId)
+			var teamNameCheck = true;
+			if (document.getElementsByTagName("input").redTeamName.value == "Red" || document.getElementsByTagName("input").blueTeamName.value == "Blue")
+			{
+				teamNameCheck = false;
+			}
+            if (((checkProcess - oldTime) >= (15*60) || currentId != oldId) && teamNameCheck === false)
             {
                 GM_setValue("checkTime", checkProcess);
                 GM_setValue("launchGroupId", currentId);
