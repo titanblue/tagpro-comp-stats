@@ -145,3 +145,5 @@ v0.34 (09/01/2018)- Fixed a group bug where leader status is not properly establ
 v0.35 (09/12/2018)- Removed direct group creation link, removed groupLeader functions, general cleanup
 
 v0.36 (09/30/2018)- Refactored code to allow change between leader/spectator, increased timout time for group functions, added ability to save game data locally, fixed cap update spam bug, reimplement checkLeader function, added ability to show update notes in group, officially added privacy policy
+
+v0.37 (10/11/2018)- Restructured group leader checking, restructured checking if group matches comp state, added a notification which shows if abbreviations aren't set and group matches comp state, added option to enable/disable abbreviation checks, restructured cap updates/final stats submissions, restructured local export json, added a refresh check to allow script to run when user refreshes in game, league selector is now hidden if group is a pub group, general cleanup
