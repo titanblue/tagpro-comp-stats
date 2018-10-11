@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3608
+// @version        0.3609
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -747,6 +747,14 @@ function leaderReady() {
         {
             array.push("Enable Saving Local Stats [Currently Disabled]");
         }
+        if (GM_getValue("backAbbrCheck", true) === true)
+        {
+            array.push("Disable Abbreviation Checks [Currently Enabled]");
+        }
+        else
+        {
+            array.push("Enable Abbreviation Checks [Currently Disabled]");
+        }
         for (var i = 0; i < array.length; i++)
         { // Fill in the league selector with the leagues in the json
             var option;
@@ -791,7 +799,7 @@ function leaderReady() {
             {
                 teamNameCheck = false;
             }
-            if (((checkProcess - oldTime) >= (15*60) || currentId != oldId) && teamNameCheck === false)
+            if (((checkProcess - oldTime) >= (15*60) || currentId != oldId) && teamNameCheck === false && GM_getValue("backAbbrCheck", true) === true)
             {
                 GM_setValue("checkTime", checkProcess);
                 GM_setValue("launchGroupId", currentId);
@@ -833,6 +841,17 @@ function openSettings(setting) {
         GM_setValue("backLocalStorage", false);
         newSetting = "Enable Saving Local Stats [Currently Disabled]";
     }
+    else if (setting == "Disable Abbreviation Checks [Currently Enabled]")
+    {
+        GM_setValue("backAbbrCheck", false);
+        newSetting = "Enable Abbreviation Checks [Currently Disabled]";
+    }
+    else if (setting == "Enable Abbreviation Checks [Currently Disabled]")
+    {
+        GM_setValue("backAbbrCheck", true);
+        newSetting = "Disable Abbreviation Checks [Currently Enabled]";
+    }
+
     var updateSettingsArray = document.getElementById("autoscoreLeague").getElementsByTagName("option");
     for (var i = updateSettingsArray.length - 1; i >= 0; i--)
     { // loop backwards in the league selector array to update setting text
@@ -960,7 +979,7 @@ function timeFromSeconds(t, e) {
 
 function updateTeamAbr() { // This function fills in the team abbreviations on the group page
     var abrJson = GM_getValue("autoscoreAbr");
-    var settingsList = ["Disable Jerseys [Currently Enabled]", "Enable Jerseys [Currently Disabled]", "Disable Jersey Spin [Currently Enabled]", "Enable Jersey Spin [Currently Disabled]", "Disable Saving Local Stats [Currently Enabled]", "Enable Saving Local Stats [Currently Disabled]"];
+    var settingsList = ["Disable Jerseys [Currently Enabled]", "Enable Jerseys [Currently Disabled]", "Disable Jersey Spin [Currently Enabled]", "Enable Jersey Spin [Currently Disabled]", "Disable Saving Local Stats [Currently Enabled]", "Enable Saving Local Stats [Currently Disabled]", "Disable Abbreviation Checks [Currently Enabled]", "Enable Abbreviation Checks [Currently Disabled]"];
     if (settingsList.indexOf(document.getElementById("autoscoreLeague").value) >= 0)
     {
         openSettings(document.getElementById("autoscoreLeague").value);
