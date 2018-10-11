@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3607
+// @version        0.3608
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -124,23 +124,23 @@ if (GM_getValue("tpcsLastHref",0) != 0)
         var playerLate = GM_getValue("tpcsLateFlag", false);
         document.getElementById("cheering").addEventListener("play", goodCap, false); //Note: play event does not activate if sounds are muted
         document.getElementById("sigh").addEventListener("play", badCap, false); // However, play event does activate is volume is set to 0 (but no mute)
-        // these functions are inside the block instead of outside the script since I don't know how else to do it
+        // Todo: write function to set volume to 0 to allow sound events
         if (GM_getValue("tpcsStartTime",0) > 0)
-        { // If the start time was previously saved, call back
+        { // If the start time was previously saved (i.e. player refreshed), call back
             startTime = GM_getValue("tpcsStartTime");
+            updateRedCaps = GM_getValue("tpcsRefreshRed", 0);
+            updateBlueCaps = GM_getValue("tpcsRefreshBlue", 0);
             playerLate = false;
             firstSound = false;
         }
+        // these functions are inside the block instead of outside the script since I don't know how else to do it
         function goodCap() {
             if (firstSound === true)
             { //the first cheering sound starts the game, so don't increment cap counter
                 console.log("Start of comp game detected");
-                else
-                { // If the start time doesn't exist, make a new one
-                    var x = new Date();
-                    startTime = (Math.floor(x.getTime() / 1000) + x.getTimezoneOffset() * 60); // gets start time in UTC to avoid timezone confusion
-                    GM_setValue("tpcsStartTime", startTime);
-                }
+                var x = new Date();
+                startTime = (Math.floor(x.getTime() / 1000) + x.getTimezoneOffset() * 60); // gets start time in UTC to avoid timezone confusion
+                GM_setValue("tpcsStartTime", startTime);
             }
             else if (userTeam == 1)
             { // adds cap to Red team
@@ -205,6 +205,8 @@ if (GM_getValue("tpcsLastHref",0) != 0)
         };
         window.onbeforeunload = function() { //send stats before exiting the game
             GM_setValue("tpcsLateFlag", true); // set the late flag to true in case the user refreshes.
+            GM_setValue("tpcsRefreshRed", updateRedCaps);
+            GM_setValue("tpcsRefreshBlue", updateBlueCaps);
             if (typeof(backscoreRedCaps) == "undefined")
             { // undefined happens when there is no player on a team, so redefine to 0.
                 backscoreRedCaps = 0;
