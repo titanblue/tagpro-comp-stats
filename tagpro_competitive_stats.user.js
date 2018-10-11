@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3604
+// @version        0.3605
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -47,8 +47,6 @@ if (GM_getValue("tpcsLastHref",0) != 0)
     if (GM_getValue("tpcsLastHref",0) != window.location.href)
     { // player left the game, so clear the checks
         GM_setValue("compCheck", false); // Set comp check to false to avoid accidentally triggering spec mode
-        GM_setValue("backRedJersey", false); // Delete stored jersey data so it doesn't get triggered
-        GM_setValue("backBlueJersey", false);
         GM_setValue("tpcsLastHref",0);
 		GM_setValue("tpcsStartTime",0);
     }
@@ -86,7 +84,10 @@ if (GM_getValue("tpcsLastHref",0) != 0)
         var redundantLeadCheck = setInterval(function () { // Recheck for leader every half second for ten seconds in case leader functions didn't load
             if (Array.apply(null, document.getElementsByClassName("js-leader")).length > 0)
             {
-                changeLeader(true);
+                if (!document.getElementById("autoscoreLeague"))
+				{ // if leader stuff wasn't activated by something else, start leader functions
+					changeLeader(true);
+				}
                 window.clearInterval(redundantLeadCheck);
             }
             else if (redundantCount > 20)
@@ -559,7 +560,7 @@ function groupEscape(group, checkVersion) {
     var groupPlayers = Object.keys(tagpro.group.players);
     var pubCount = 0;
     for (var g = 0; g < groupPlayers.length; g++)
-    {
+    { // This function checks if anyone is in pub team (team 0)
         if (tagpro.group.players[groupPlayers[g]].team == 0)
         {
             pubCount++;
@@ -570,13 +571,16 @@ function groupEscape(group, checkVersion) {
     {
         if (escapeCheck == 13 || document.getElementsByClassName("js-setting-value")[1].innerText != "10 Minutes")
         { // If minutes is the only thing which doesn't match, then it's still a legal comp game
-            console.log("passed comp check");
             GM_setValue("compCheck", true);
             getJerseys();
         }
+		else
+		{
+			GM_setValue("compCheck", false);
+		}
     }
     else
-    {
+    { // If not enough checks passed, or if a player was detected on the pub team, comp check fails.
         console.log("failed comp check");
         GM_setValue("compCheck", false);
     }
@@ -584,7 +588,6 @@ function groupEscape(group, checkVersion) {
 
 function groupReady(isLeader) { // grab necessary info from the group
     tagpro.ready(function() {
-        GM_setValue("compCheck", false);
         var jerseyRequest = new XMLHttpRequest();
         jerseyRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/jerseys.json"); // This json contains a master list of jerseys
         jerseyRequest.responseType = "json";
