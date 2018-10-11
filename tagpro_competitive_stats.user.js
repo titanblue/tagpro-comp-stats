@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3610
+// @version        0.3611
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -616,7 +616,7 @@ function groupReady(isLeader) { // grab necessary info from the group
         {
             checkVersion = GM_info.script.version;
             GM_setValue("tpcsCurrentVer",checkVersion);
-            var updateNotes = "The TagPro Competitive Stats Userscript has been updated to V" + GM_info.script.version + "!\nHere is a summary of updates:\n1. Refactored leader code to allow swapping between leader/spectator\n2. increased timeout for group functions\n3. Added ability to save game data locally\n4. Fixed incorrect executions of capUpdate function\n5. Reimplement checkLeader function\n6. Added ability to show update notes in userscript\nClicking Ok means you accept the changes to this script and the corresponding privacy policy.\nThe full privacy policy and change log can be found by going to the script homepage through the Tampermonkey menu."
+            var updateNotes = "The TagPro Competitive Stats Userscript has been updated to V" + GM_info.script.version + "!\nHere is a summary of updates:\n1. Restructured group leader checking\n2. Restructured checking if group matches comp state\n3. Added a notification which shows if abbreviations aren't set and group matches comp state\n4. Added option to enable/disable abbreviation checks\n5. Restructured cap updates/final stats submissions\n6. Restructured local export json\n7. Added a refresh check to allow script to run when user refreshes in game\n8. League selector is now hidden if group is a pub group\n9. General cleanup\nClicking Ok means you accept the changes to this script and the corresponding privacy policy.\nThe full privacy policy and change log can be found by going to the script homepage through the Tampermonkey menu."
             GM_setValue("tpcsConfirmation", window.confirm(updateNotes));
         }
         socket.on("play", function() { // play event
