@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3606
+// @version        0.3607
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -48,7 +48,7 @@ if (GM_getValue("tpcsLastHref",0) != 0)
     { // player left the game, so clear the checks
         GM_setValue("compCheck", false); // Set comp check to false to avoid accidentally triggering spec mode
         GM_setValue("tpcsLastHref",0);
-		GM_setValue("tpcsStartTime",0);
+        GM_setValue("tpcsStartTime",0);
     }
 }
 
@@ -85,9 +85,9 @@ if (GM_getValue("tpcsLastHref",0) != 0)
             if (Array.apply(null, document.getElementsByClassName("js-leader")).length > 0)
             {
                 if (!document.getElementById("autoscoreLeague"))
-				{ // if leader stuff wasn't activated by something else, start leader functions
-					changeLeader(true);
-				}
+                { // if leader stuff wasn't activated by something else, start leader functions
+                    changeLeader(true);
+                }
                 window.clearInterval(redundantLeadCheck);
             }
             else if (redundantCount > 20)
@@ -125,15 +125,16 @@ if (GM_getValue("tpcsLastHref",0) != 0)
         document.getElementById("cheering").addEventListener("play", goodCap, false); //Note: play event does not activate if sounds are muted
         document.getElementById("sigh").addEventListener("play", badCap, false); // However, play event does activate is volume is set to 0 (but no mute)
         // these functions are inside the block instead of outside the script since I don't know how else to do it
+        if (GM_getValue("tpcsStartTime",0) > 0)
+        { // If the start time was previously saved, call back
+            startTime = GM_getValue("tpcsStartTime");
+            playerLate = false;
+            firstSound = false;
+        }
         function goodCap() {
             if (firstSound === true)
             { //the first cheering sound starts the game, so don't increment cap counter
                 console.log("Start of comp game detected");
-                if (GM_getValue("tpcsStartTime",0) > 0)
-                { // If the start time was previously saved, call back
-                    startTime = GM_getValue("tpcsStartTime");
-                    playerLate = false;
-                }
                 else
                 { // If the start time doesn't exist, make a new one
                     var x = new Date();
@@ -203,7 +204,6 @@ if (GM_getValue("tpcsLastHref",0) != 0)
             }
         };
         window.onbeforeunload = function() { //send stats before exiting the game
-            GM_setValue("userTeam", "none");
             GM_setValue("tpcsLateFlag", true); // set the late flag to true in case the user refreshes.
             if (typeof(backscoreRedCaps) == "undefined")
             { // undefined happens when there is no player on a team, so redefine to 0.
@@ -574,10 +574,10 @@ function groupEscape(group, checkVersion) {
             GM_setValue("compCheck", true);
             getJerseys();
         }
-		else
-		{
-			GM_setValue("compCheck", false);
-		}
+        else
+        {
+            GM_setValue("compCheck", false);
+        }
     }
     else
     { // If not enough checks passed, or if a player was detected on the pub team, comp check fails.
@@ -784,11 +784,11 @@ function leaderReady() {
             var oldId = GM_getValue("launchGroupId","nones");
             var currentId = GM_getValue("groupId", "none")
             var oldTime = GM_getValue("checkTime",0);
-			var teamNameCheck = true;
-			if (document.getElementsByTagName("input").redTeamName.value == "Red" || document.getElementsByTagName("input").blueTeamName.value == "Blue")
-			{
-				teamNameCheck = false;
-			}
+            var teamNameCheck = true;
+            if (document.getElementsByTagName("input").redTeamName.value == "Red" || document.getElementsByTagName("input").blueTeamName.value == "Blue")
+            {
+                teamNameCheck = false;
+            }
             if (((checkProcess - oldTime) >= (15*60) || currentId != oldId) && teamNameCheck === false)
             {
                 GM_setValue("checkTime", checkProcess);
