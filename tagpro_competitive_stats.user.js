@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.37
+// @version        0.3701
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -42,18 +42,17 @@ if (window.location.href.split(".com")[1].match(/^\/groups\/[a-z]{8}\/*#*[crt]*g
     });
 }
 
-if (GM_getValue("tpcsLastHref",0) != 0)
-{ // This is a refresh condition to check if the player has re-entered the game.
-    if (GM_getValue("tpcsLastHref",0) != window.location.href)
-    { // player left the game, so clear the checks
-        GM_setValue("compCheck", 0); // Set comp check to 0 to avoid accidentally triggering spec mode
-        GM_setValue("tpcsLastHref",0);
-        GM_setValue("tpcsStartTime",0);
-    }
-}
-
 (function(window) {
     'use strict';
+	if (GM_getValue("tpcsLastHref",0) != 0)
+	{ // This is a refresh condition to check if the player has re-entered the game.
+		if (GM_getValue("tpcsLastHref",0) != window.location.href)
+		{ // player left the game, so clear the checks
+			GM_setValue("compCheck", 0); // Set comp check to 0 to avoid accidentally triggering spec mode
+			GM_setValue("tpcsLastHref",0);
+			GM_setValue("tpcsStartTime",0);
+		}
+	}
     // Group Functions, or the functions which run when user is on the group page
     if (window.location.href.split(".com")[1].match(/^\/groups\/#[crt]g-*[ 0-z]*$/))
     { // If #cg/#tg/#rg is passed through, creates new group with competitive settings
