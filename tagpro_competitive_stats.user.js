@@ -605,7 +605,7 @@ function groupEscape(group, checkVersion) {
 function groupReady(isLeader) { // grab necessary info from the group
     tagpro.ready(function() {
         var jerseyRequest = new XMLHttpRequest();
-        jerseyRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/jerseys.json"); // This json contains a master list of jerseys
+        jerseyRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/stable/jerseys.json"); // This json contains a master list of jerseys
         jerseyRequest.responseType = "json";
         jerseyRequest.send();
         jerseyRequest.onload = function() {
@@ -738,7 +738,7 @@ function leaderReady() {
     }
     selectList.title = "Click here to set a league for team abbreviations or change custom settings!";
     var abbrRequest = new XMLHttpRequest();
-    abbrRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/master/teams.json"); // This json contains the abbreviations to use in group
+    abbrRequest.open("GET", "https://raw.githubusercontent.com/Poeticalto/tagpro-comp-stats/stable/teams.json"); // This json contains the abbreviations to use in group
     abbrRequest.responseType = "json";
     abbrRequest.send();
     abbrRequest.onload = function() {
