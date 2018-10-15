@@ -1,5 +1,5 @@
 {
-	"Leagues": ["None","NA Competitive","Majors","Minors","NLTP-A","NLTP-B","US Contenders","NA Tournaments","TToC","RCL","CLTP","Pipberry","EU Competitive","ELTP Majors","ELTP Minors"],
+	"Leagues": ["None", "NA Competitive", "Majors", "Minors", "NLTP-A", "NLTP-B", "US Contenders", "NA Tournaments", "TToC", "RCL", "CLTP", "Pipberry", "EU Competitive", "ELTP Majors", "ELTP Minors"],
 	"Majors": [
 		["", "Radius", "Mickey Mouse Poperation", "Red Hot Chili Poppers", "She Wants the KD", "Stranger Pings", "TC Jukes", "The CreoKoalas", "The United Pingdom", "Pi", "Pi-Curious", "Origin", "Chennai Super Pings", "Centra", "Centra of Attention", "The Good Gravy Boat", "The Holy Seehawks"],
 		["Radius", "Origin", "Pi", "Centra"],
