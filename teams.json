@@ -21,9 +21,9 @@
 		["", "", "BCJK", "BPRE", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
 	],
 	"US Contenders": [
-		["", "Group A", "Bubble Balls", "Gasping for Flair", "Los Balludos", "Sippin' on Jin and Jukes", "Team 3", "The Hard D Boys", "Why So Serious?", "Group B", "Ballchester United", "Death Cap for Cutie", "Jukes and Cats Alumni", "OGPHO", "Pi-romaniacs", "TC Jukes", "Yikes"],
-		["Group A", "Group B"],
-		["", "", "UBUB", "UGFF", "ULSB", "USJJ", "UTM3", "UHDB", "UWSS", "", "UBLC", "UDCC", "UJCA", "UOPH", "UPIR", "UTCJ", "UYKS"]
+		["", "Group A", "Team 3", "Yikes", "Jukes and Cats Alumni", "Pi-romaniacs", "The Hard D Boys", "Group B", "Bubble Balls", "OGPHO", "Sippin' on Jin and Jukes", "Ballchester United", "TC Jukes", "Group C", "Death Cap for Cutie", "Why So Serious?", "Gasping for Flair", "The Powerup Girls", "Los Balludos"],
+		["Group A", "Group B", "Group C"],
+		["", "", "UTM3", "UYKS", "UJCA", "UPIR", "UHDB", "", "UBUB", "UOPH", "USJJ", "UBLC", "UTCJ", "", "UDCC", "UWSS", "UGFF", "UPUP", "ULSB"]
 	],
 	"ELTP Majors": [
 		["", "FC Jukerecht", "Laghetti", "Manny on the Cap", "Marsayyy", "Roll Madrid", "The Ballabies", "The CreoKoalas [EU]", "The Snipe's Watch"],
