@@ -1,5 +1,5 @@
 {
-	"Leagues": ["None","NA Competitive","Majors","Minors","NLTP-A","NLTP-B","NA Tournaments","TToC","RCL","CLTP","Pipberry","EU Competitive","ELTP Majors","ELTP Minors"],
+	"Leagues": ["None", "NA Competitive", "Majors", "Minors", "NLTP-A", "NLTP-B", "US Contenders", "NA Tournaments", "TToC", "RCL", "CLTP", "Pipberry", "EU Competitive", "ELTP Majors", "ELTP Minors"],
 	"Majors": [
 		["", "Radius", "Mickey Mouse Poperation", "Red Hot Chili Poppers", "She Wants the KD", "Stranger Pings", "TC Jukes", "The CreoKoalas", "The United Pingdom", "Pi", "Pi-Curious", "Origin", "Chennai Super Pings", "Centra", "Centra of Attention", "The Good Gravy Boat", "The Holy Seehawks"],
 		["Radius", "Origin", "Pi", "Centra"],
@@ -19,6 +19,11 @@
 		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
 		["Radius", "Origin", "Pi", "Centra"],
 		["", "", "BCJK", "BPRE", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
+	],
+	"US Contenders": [
+		["", "Group A", "Team 3", "Yikes", "Jukes and Cats Alumni", "Pi-romaniacs", "The Hard D Boys", "Group B", "Bubble Balls", "OGPHO", "Sippin' on Jin and Jukes", "Ballchester United", "TC Jukes", "Group C", "Death Cap for Cutie", "Why So Serious?", "Gasping for Flair", "The Powerup Girls", "Los Balludos"],
+		["Group A", "Group B", "Group C"],
+		["", "", "UTM3", "UYKS", "UJCA", "UPIR", "UHDB", "", "UBUB", "UOPH", "USJJ", "UBLC", "UTCJ", "", "UDCC", "UWSS", "UGFF", "UPUP", "ULSB"]
 	],
 	"ELTP Majors": [
 		["", "FC Jukerecht", "Laghetti", "Manny on the Cap", "Marsayyy", "Roll Madrid", "The Ballabies", "The CreoKoalas [EU]", "The Snipe's Watch"],
