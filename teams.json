@@ -1,5 +1,5 @@
 {
-	"Leagues": ["None", "NA Competitive", "Majors", "Minors", "NLTP-A", "NLTP-B", "US Contenders", "NA Tournaments", "TToC", "RCL", "CLTP", "Pipberry", "EU Competitive", "ELTP Majors", "ELTP Minors"],
+	"Leagues": ["None", "NA Competitive", "NFTL-A", "NFTL-B", "US Contenders", "NA Tournaments", "TToC", "RCL", "CLTP", "Pipberry", "EU Competitive", "ELTP Majors", "ELTP Minors"],
 	"Majors": [
 		["", "Radius", "Mickey Mouse Poperation", "Red Hot Chili Poppers", "She Wants the KD", "Stranger Pings", "TC Jukes", "The CreoKoalas", "The United Pingdom", "Pi", "Pi-Curious", "Origin", "Chennai Super Pings", "Centra", "Centra of Attention", "The Good Gravy Boat", "The Holy Seehawks"],
 		["Radius", "Origin", "Pi", "Centra"],
@@ -19,6 +19,16 @@
 		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
 		["Radius", "Origin", "Pi", "Centra"],
 		["", "", "BCJK", "BPRE", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
+	],
+	"NFTL-A": [
+		["", "Radius", "Au Neutral", "Gate Keepers", "Rutabaga", "Spike and Subscribe", "The Neutralizers", "Pi", "Baoting with Babish", "Origin", "Ball n Large", "Wait Wait Don't Tag Me", "Wolves of Ball Street", "Centra", "877-CAPSNOW", "Land After Manips", "Respawnsiballs"],
+		["Radius", "Pi", "Origin", "Centra"],
+		["", "", "TAUN", "TGTK", "TRTB", "TSAS", "TTNT", "", "TBWB", "", "TBNL", "TWDT", "TWBS", "", "T877", "TLAM", "TRSP"]
+	],
+	"NFTL-B": [
+		["", "Radius", "Au Neutral", "Gate Keepers", "Rutabaga", "Spike and Subscribe", "The Neutralizers", "Pi", "Baoting with Babish", "Origin", "Ball n Large", "Wait Wait Don't Tag Me", "Wolves of Ball Street", "Centra", "877-CAPSNOW", "Land After Manips", "Respawnsiballs"],
+		["Radius", "Pi", "Origin", "Centra"],
+		["", "", "UAUN", "UGTK", "URTB", "USAS", "UTNT", "", "UBWB", "", "UBNL", "UWDT", "UWBS", "", "U877", "ULAM", "URSP"]
 	],
 	"US Contenders": [
 		["", "Group A", "Team 3", "Yikes", "Jukes and Cats Alumni", "Pi-romaniacs", "The Hard D Boys", "Group B", "Bubble Balls", "OGPHO", "Sippin' on Jin and Jukes", "Ballchester United", "TC Jukes", "Group C", "Death Cap for Cutie", "Why So Serious?", "Gasping for Flair", "The Powerup Girls", "Los Balludos"],
