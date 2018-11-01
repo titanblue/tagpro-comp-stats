@@ -1,5 +1,10 @@
 {
-	"Leagues": ["None", "NA Competitive", "NFTL-A", "NFTL-B", "US Contenders", "NA Tournaments", "TToC", "RCL", "CLTP", "Pipberry", "EU Competitive", "ELTP Majors", "ELTP Minors"],
+	"Leagues": {
+		"None": [], 
+		"NA Competitive": ["NFTL-A", "NFTL-B", "US Contenders"],
+		"NA Tournaments": ["TToC", "RCL", "CLTP", "Pipberry"],
+		"EU Competitive", ["ELTP Majors", "ELTP Minors"]
+	},
 	"Majors": [
 		["", "Radius", "Mickey Mouse Poperation", "Red Hot Chili Poppers", "She Wants the KD", "Stranger Pings", "TC Jukes", "The CreoKoalas", "The United Pingdom", "Pi", "Pi-Curious", "Origin", "Chennai Super Pings", "Centra", "Centra of Attention", "The Good Gravy Boat", "The Holy Seehawks"],
 		["Radius", "Origin", "Pi", "Centra"],
@@ -21,7 +26,7 @@
 		["", "", "BCJK", "BPRE", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
 	],
 	"NFTL-A": [
-		["", "Radius", "\tAu Neutral", "\tGate Keepers", "Rutabaga", "Spike and Subscribe", "The Neutralizers", "Pi", "Baoting with Babish", "Origin", "Ball n Large", "Wait Wait Don't Tag Me", "Wolves of Ball Street", "Centra", "877-CAPSNOW", "Land After Manips", "Respawnsiballs"],
+		["", "Radius", "Au Neutral", "Gate Keepers", "Rutabaga", "Spike and Subscribe", "The Neutralizers", "Pi", "Baoting with Babish", "Origin", "Ball n Large", "Wait Wait Don't Tag Me", "Wolves of Ball Street", "Centra", "877-CAPSNOW", "Land After Manips", "Respawnsiballs"],
 		["Radius", "Pi", "Origin", "Centra"],
 		["", "", "TAUN", "TGTK", "TRTB", "TSAS", "TTNT", "", "TBWB", "", "TBNL", "TWDT", "TWBS", "", "T877", "TLAM", "TRSP"]
 	],

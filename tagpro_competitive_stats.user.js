@@ -10,7 +10,7 @@
 // @downloadURL    https://gist.github.com/Poeticalto/00de8353fce79cac9059b22f20242039/raw/TagPro_Competitive_Group_Maker.user.js
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @version        0.3701
+// @version        0.3702
 // ==/UserScript==
 
 // Special thanks to  Destar, Some Ball -1, Ko, and ballparts for their work in this userscript!
@@ -776,22 +776,20 @@ function leaderReady() {
         {
             array.push("Enable Abbreviation Checks [Currently Disabled]");
         }
+		var regionList = Object.getOwnPropertyNames(array);
         for (var i = 0; i < array.length; i++)
         { // Fill in the league selector with the leagues in the json
-            var option;
-            var headerList = ["NA Competitive", "NA Tournaments", "EU Competitive", "OC Competitive", "TagPro Competitive Stats Settings"];
-            if (headerList.indexOf(array[i]) >= 0)
-            { // these are headers
-                option = document.createElement("optgroup");
-                option.label = array[i];
+            var optionParent = document.createElement("optgroup");
+            optionParent.label = regionList[i];
+			selectList.appendChild(optionParent);
+			var leaguesToAdd = array[regionList[i]];
+            for (var j = 0; j < leaguesToAdd.length; i++)
+			{
+                var optionToAdd = document.createElement("option");
+                optionToAdd.value = leaguesToAdd[i];
+                optionToAdd.text = leaguesToAdd[i];
+				optionParent.appendChild(optionToAdd);
             }
-            else
-            {
-                option = document.createElement("option");
-                option.value = array[i];
-                option.text = array[i];
-            }
-            selectList.appendChild(option);
         }
         if (abbrRequest.response.Leagues.indexOf(GM_getValue("autoscoreImport", "None")) > -1)
         { // Standard Import Condition
