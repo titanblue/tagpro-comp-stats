@@ -77,35 +77,36 @@ In addition, there is a Leagues property which contains the list of all leagues 
 Note: Starting with V1.0.0, teams.json will change format. Instead of three arrays per league, each league will be an object which contains objects for each division. These divisions will then have team names as the keys and team abbreviations as the values.
 
 For example:
-```JSON
+```javascript
 {
-    "Leagues": { 
+    "Leagues": { // League list split into 3 "Divisions"
 		"NA Competitive": ["NFTL-A", "NFTL-B", "US Contenders"],
 		"NA Tournaments": ["TToC", "RCL", "CLTP", "Pipberry"],
 		"EU Competitive": ["ELTP Majors", "ELTP Minors"]
 	},
-    "NFTL-A": {
-		"Radius": {
-			"Au Neutral": "TAUN",
+    "NFTL-A": { // League
+		"Radius": { // Division
+			"Au Neutral": "TAUN", // Individual Team
 			"Gate Keepers": "TGTK",
 			"Rutabaga": "TRTB",
 			"Spike and Subscribe": "TSAS",
 			"The Neutralizers": "TTNT"
 		},
-		"Pi": {
+		"Pi": { // Second Division
 			"Baoting with Babish": "TBWB"
 		},
-		"Origin": {
+		"Origin": { // Third Division
 			"Ball n Large": "TBNL",
 			"Wait Wait Don't Tag Me": "TWDT",
 			"Wolves of Ball Street": "TWBS"
 		},
-		"Centra": {
+		"Centra": { // Fourth Division
 			"877-CAPSNOW": "T877",
 			"Land After Manips": "TLAM",
 			"Respawnsiballs": "TRSP"
 		}
 	}
+    // continue leagues after
 }
 ```
 
