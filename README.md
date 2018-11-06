@@ -70,11 +70,9 @@ If you are viewing a no-script game in spectator mode, you will also be able to 
 
 This script imports two jsons in order to provide accurate information for players.
 
-teams.json holds information about each team and the corresponding abbreviation. It is formatted as a json object where each league is a property. Each league contains three arrays. The first array is the raw list. This is the list that will show up under the Red and Blue team names. The second array contains header labels. These labels help to distinguish teams based on some qualification like server or conference. The third array is the abbreviation list. This array should be the exact same size as the first array, where each position corresponds to the abbreviation of the team in the first array.
+teams.json holds information about each team and the corresponding abbreviation. It is formatted as a json object where each league is a property. Each league contains the same number of objects as divisions in the league, with division names as the properties. These objects will then have the full team name as the property and the team abbreviation as the value.
 
-In addition, there is a Leagues property which contains the list of all leagues in the json. This is used to populate the autoscore league selector at the top of the group page.
-
-Note: Starting with V1.0.0, teams.json will change format. Instead of three arrays per league, each league will be an object which contains objects for each division. These divisions will then have team names as the keys and team abbreviations as the values.
+In addition, there is a Leagues property which contains the list of all leagues in the json. This is used to populate the autoscore league selector at the top of the group page. Similar to each league, this is also split into "divisions" to distinguish each league. However, league names are stored in arrays instead of properties since there is no further information needed.
 
 For example:
 
@@ -94,15 +92,15 @@ For example:
 			"The Neutralizers": "TTNT"
 		},
 		"Pi": { // Second Division
-			"Baoting with Babish": "TBWB"
+			"Baoting with Babish": "TBWB" // Individual Team
 		},
 		"Origin": { // Third Division
-			"Ball n Large": "TBNL",
+			"Ball n Large": "TBNL", // Individual Team
 			"Wait Wait Don't Tag Me": "TWDT",
 			"Wolves of Ball Street": "TWBS"
 		},
 		"Centra": { // Fourth Division
-			"877-CAPSNOW": "T877",
+			"877-CAPSNOW": "T877", // Individual Team
 			"Land After Manips": "TLAM",
 			"Respawnsiballs": "TRSP"
 		}
