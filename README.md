@@ -77,7 +77,7 @@ In addition, there is a Leagues property which contains the list of all leagues 
 Note: Starting with V1.0.0, teams.json will change format. Instead of three arrays per league, each league will be an object which contains objects for each division. These divisions will then have team names as the keys and team abbreviations as the values.
 
 For example:
-```json
+```JSON
 {
     "Leagues": { 
 		"NA Competitive": ["NFTL-A", "NFTL-B", "US Contenders"],
