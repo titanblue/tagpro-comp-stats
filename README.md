@@ -79,7 +79,7 @@ For example:
 ```javascript
 {
     "Leagues": { // League list split into 3 "Divisions"
-		"NA Competitive": ["NFTL-A", "NFTL-B", "US Contenders"],
+		"NA Competitive": ["NFTL-A", "NFTL-B", "US Contenders"], // array containing league names
 		"NA Tournaments": ["TToC", "RCL", "CLTP", "Pipberry"],
 		"EU Competitive": ["ELTP Majors", "ELTP Minors"]
 	},
