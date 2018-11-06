@@ -77,6 +77,7 @@ In addition, there is a Leagues property which contains the list of all leagues 
 Note: Starting with V1.0.0, teams.json will change format. Instead of three arrays per league, each league will be an object which contains objects for each division. These divisions will then have team names as the keys and team abbreviations as the values.
 
 For example:
+
 ```javascript
 {
     "Leagues": { // League list split into 3 "Divisions"
@@ -112,7 +113,21 @@ For example:
 
 jerseys.json holds the raw imgur IDs for the jerseys of each team. It is formatted as a json object where each team abbreviation is a property. Abbreviations are sorted alphabetically, with the exception of NLTP (with league identifiers A and B) because league rules mandate the same abbreviation for both teams. Each abbreviation contains a single array with two strings and four numbers corresponding to the raw imgur IDs of the jerseys and the transparency of each jersey. The first string is the red jersey and the second string is the blue jersey. The first number corresponds to the transparency of the actual ball with the red jersey and the second number corresponds to the transparency of the actual ball with the blue jersey. The third number corresponds to the transparency of the red jersey and the second number corresponds to the transparency of the blue jersey. 1 is the default value while 0 is fully transparent.
 
-For examples on how to format each json, consult the teams.json and jerseys.json above.
+For example:
+
+```javascript
+{
+    "MGGB": ["TAMY9Ur", // imgur ID for red jersey
+        "vFE57qK", // imgur ID for blue jersey
+        1, // transparency of ball with red jersey
+        1, // transparency of ball with blue jersey
+        1, // transparency of jersey with red jersey
+        1], //  transparency of jersey with blue jersey
+    "MPIC": ["oEGw0Ql", "xIyWZ5w", 1, 1, 1, 1],
+    "MCRK": ["pxYvTOi", "akr6qGR", 1, 1, 1, 1]
+    // continue teams after
+}
+```
 
 --- 
 
