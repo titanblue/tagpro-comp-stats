@@ -1,30 +1,54 @@
 {
 	"Leagues": { 
-		"NA Competitive": ["NFTL-A", "NFTL-B", "US Contenders"],
+		"NA Competitive": ["Majors", "Minors", "NLTP-A", "NLTP-B", "US Contenders"],
 		"NA Tournaments": ["TToC", "RCL", "CLTP", "Pipberry"],
 		"EU Competitive": ["ELTP Majors", "ELTP Minors"]
 	},
-	"Majors": [
-		["", "Radius", "Mickey Mouse Poperation", "Red Hot Chili Poppers", "She Wants the KD", "Stranger Pings", "TC Jukes", "The CreoKoalas", "The United Pingdom", "Pi", "Pi-Curious", "Origin", "Chennai Super Pings", "Centra", "Centra of Attention", "The Good Gravy Boat", "The Holy Seehawks"],
-		["Radius", "Origin", "Pi", "Centra"],
-		["", "", "MMMP", "RHCP", "MSKD", "MSRP", "MTCJ", "MCRK", "MGBR", "", "MPIC", "", "MCSP", "", "MCOA", "MGGB", "MTHS"]
-	],
-	"Minors": [
-		["", "Radius", "Minnie Mouse Poperation", "Blue Hot Chili Poppers", " The Seven Deadly Syns", "Bust a Pup", "Club Pinguin", "The CreoDudes", "Boostnia and Herzegovina", "Pi", "Pi-Curious", "Origin", "Pings XI Punjab", "Centra", "Attention Whores", "The Jungle Jukes", "Seattle Superspawnics"],
-		["Radius", "Origin", "Pi", "Centra"],
-		["", "", "NMMP", "BHCP", "N7DS", "NBAP", "NCLP", "NCRD", "NBIH", "", "NPIC", "", "NPXI", "", "NAW", "NJNG", "NSSP"]
-	],
-	"NLTP-A": [
-		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
-		["Radius", "Origin", "Pi", "Centra"],
-		["", "", "ACJK", "APRE", "APRO", "APOC", "ATTT", "", "ABOY", "ACHP", "AOPH", "ADNO", "", "AHHR", "ATBA", "", "ABFL", "ALBT", "ATNW"]
-	],
-	"NLTP-B": [
-		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
-		["Radius", "Origin", "Pi", "Centra"],
-		["", "", "BCJK", "BPRE", "BPRO", "BPOC", "BTTT", "", "BBOY", "BCHP", "BOPH", "BDNO", "", "BHHR", "BTBA", "", "BBFL", "BLBT", "BTNW"]
-	],
-	"NFTL-A": {
+	"Majors": {
+		"Radius": {
+			"Mickey Mouse Poperation": "MMMP",
+			"Red Hot Chili Poppers": "RHCP",
+			"She Wants the KD": "MSKD",
+			"Stranger Pings": "MSRP",
+			"TC Jukes": "MTCJ",
+			"The CreoKoalas": "MCRK",
+			"The United Pingdom", "MGBR"
+		},
+		"Pi": {
+			"Pi-Curious": "MPIC"
+		},
+		"Origin": {
+			"Chennai Super Pings": "MCSP"
+		},
+		"Centra": {
+			"Centra of Attention": "MCOA",
+			"The Good Gravy Boat": "MGGB",
+			"The Holy Seehawks": "MTHS"
+		}
+	},
+	"Minors": {
+		"Radius": {
+			"Mickey Mouse Poperation": "NMMP",
+			"Red Hot Chili Poppers": "BHCP",
+			"She Wants the KD": "N7DS",
+			"Stranger Pings": "NBAP",
+			"TC Jukes": "NCLP",
+			"The CreoKoalas": "NCRK",
+			"The United Pingdom", "NBIH"
+		},
+		"Pi": {
+			"Pi-Curious": "NPIC"
+		},
+		"Origin": {
+			"Chennai Super Pings": "NPXI"
+		},
+		"Centra": {
+			"Centra of Attention": "NAW",
+			"The Good Gravy Boat": "NJNG",
+			"The Holy Seehawks": "NSSP"
+		}
+	},
+	"NLTP-A": {
 		"Radius": {
 			"Au Neutral": "TAUN",
 			"Gate Keepers": "TGTK",
@@ -46,7 +70,7 @@
 			"Respawnsiballs": "TRSP"
 		}
 	},
-	"NFTL-B": {
+	"NLTP-B": {
 		"Radius": {
 			"Au Neutral": "UAUN",
 			"Gate Keepers": "UGTK",
