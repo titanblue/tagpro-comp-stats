@@ -1,14 +1,14 @@
 {
-	"Leagues": ["None", "NA Competitive", "Majors", "US Contenders", "NA Tournaments", "TToC", "RCL", "CLTP", "Pipberry"],
+	"Leagues": ["None", "NA Competitive", "Majors", "Minors", "US Contenders", "NA Tournaments", "TToC", "RCL", "CLTP", "Pipberry"],
 	"Majors": [
 		["", "Radius", "ALL CAPS", "Balls on Parade", "CreoKoalas", "Mickey Mouse Poperation", "Soviet Ballers", "The United Pingdom", "Pi", "Holy Rollers", "Origin", "TC Jukes", "Sphere", "Chennai Super Pings", "Centra", "Centra of Attention", "Red Hot Chili Poppers", "The Holy Seehawks"],
 		["Radius", "Origin", "Pi", "Sphere", "Centra"],
 		["", "", "MAC", "MBOP", "MCRK", "MMMP", "MSVB", "MGBR", "", "MHR", "", "MTCJ", "", "MCSP", "", "MCOA", "RHCP", "MTHS"]
 	],
 	"Minors": [
-		["", "Radius", "Minnie Mouse Poperation", "Blue Hot Chili Poppers", " The Seven Deadly Syns", "Bust a Pup", "Club Pinguin", "The CreoDudes", "Boostnia and Herzegovina", "Pi", "Pi-Curious", "Origin", "Pings XI Punjab", "Centra", "Attention Whores", "The Jungle Jukes", "Seattle Superspawnics"],
+		["", "Radius", "Balls on Parade" "Blue Hot Chili Poppers", "Boostnia and Herzegovina", "CreoDudes", "Minnie Mouse Poperation", "SMALL CAPS", "Ballshevik Revolution", "Pi", "Holy Rollers", "Origin", "Club Pinguin", "Pings XI Punjab", "Centra", "Respawnsiballs", "Seattle Superspawnics"],
 		["Radius", "Origin", "Pi", "Centra"],
-		["", "", "NMMP", "BHCP", "N7DS", "NBAP", "NCLP", "NCRD", "NBIH", "", "NPIC", "", "NPXI", "", "NAW", "NJNG", "NSSP"]
+		["", "", "NBOP" "BHCP", "NBIH", "NCRD", "NMMP", "NSC", "NBSR", "", "NHR", "", "NCLP", "NPXI", "Centra", "NRSP", "NSSP"]
 	],
 	"NLTP-A": [
 		["", "Radius", "CircleJukers", "Preventure Time", "Probots", "Pursuit of Cappiness", "The Tagtime Theatre", "Origin", "Ballsagna", "Chicago Pubs", "Over The Pants Handoffs", "WCYDinos", "Pi", "He Hate Re", "Tampa Bay Aightping", "Centra", "Black Flag", "The Land Before Timers", "The Night’s Watch"],
