@@ -1,0 +1,142 @@
+{
+	"Leagues": { 
+		"NA Competitive": ["Majors", "Minors", "NLTP-A", "NLTP-B", "US Contenders"],
+		"NA Tournaments": ["TToC", "RCL", "CLTP", "Pipberry"],
+		"EU Competitive": ["ECLTP"]
+	},
+	"Majors": {
+		"Radius": {
+			"Mickey Mouse Poperation": "MMMP",
+			"Red Hot Chili Poppers": "RHCP",
+			"She Wants the KD": "MSKD",
+			"Stranger Pings": "MSRP",
+			"TC Jukes": "MTCJ",
+			"The CreoKoalas": "MCRK",
+			"The United Pingdom": "MGBR"
+		},
+		"Pi": {
+			"Pi-Curious": "MPIC"
+		},
+		"Origin": {
+			"Chennai Super Pings": "MCSP"
+		},
+		"Centra": {
+			"Centra of Attention": "MCOA",
+			"The Good Gravy Boat": "MGGB",
+			"The Holy Seehawks": "MTHS"
+		}
+	},
+	"Minors": {
+		"Radius": {
+			"Mickey Mouse Poperation": "NMMP",
+			"Red Hot Chili Poppers": "BHCP",
+			"She Wants the KD": "N7DS",
+			"Stranger Pings": "NBAP",
+			"TC Jukes": "NCLP",
+			"The CreoKoalas": "NCRK",
+			"The United Pingdom": "NBIH"
+		},
+		"Pi": {
+			"Pi-Curious": "NPIC"
+		},
+		"Origin": {
+			"Chennai Super Pings": "NPXI"
+		},
+		"Centra": {
+			"Centra of Attention": "NAW",
+			"The Good Gravy Boat": "NJNG",
+			"The Holy Seehawks": "NSSP"
+		}
+	},
+	"NLTP-A": {
+		"Radius": {
+			"Au Neutral": "TAUN",
+			"Gate Keepers": "TGTK",
+			"Rutabaga": "TRTB",
+			"Spike and Subscribe": "TSAS",
+			"The Neutralizers": "TTNT"
+		},
+		"Pi": {
+			"Baoting with Babish": "TBWB"
+		},
+		"Origin": {
+			"Ball n Large": "TBNL",
+			"Wait Wait Don't Tag Me": "TWDT",
+			"Wolves of Ball Street": "TWBS"
+		},
+		"Centra": {
+			"877-CAPSNOW": "T877",
+			"Land After Manips": "TLAM",
+			"Respawnsiballs": "TRSP"
+		}
+	},
+	"NLTP-B": {
+		"Radius": {
+			"Au Neutral": "UAUN",
+			"Gate Keepers": "UGTK",
+			"Rutabaga": "URTB",
+			"Spike and Subscribe": "USAS",
+			"The Neutralizers": "UTNT"
+		},
+		"Pi": {
+			"Baoting with Babish": "UBWB"
+		},
+		"Origin": {
+			"Ball n Large": "UBNL",
+			"Wait Wait Don't Tag Me": "UWDT",
+			"Wolves of Ball Street": "UWBS"
+		},
+		"Centra": {
+			"877-CAPSNOW": "U877",
+			"Land After Manips": "ULAM",
+			"Respawnsiballs": "URSP"
+		}
+	},
+	"US Contenders": {
+		"Group A": {
+			"Team 3": "STM3",
+			"Yikes": "SYKS",
+			"Jukes and Cats Alumni": "SJCA",
+			"Pi-romaniacs": "SPIR",
+			"The Hard D Boys": "SHDB"
+		},
+		"Group B": {
+			"Bubble Balls": "SBUB",
+			"OGPHO": "SOPH",
+			"Sippin' on Jin and Jukes": "SSJJ",
+			"Ballchester United": "SBLC",
+			"TC Jukes": "STCJ"
+		},
+		"Group C": {
+			"Death Cap for Cutie": "SDCC",
+			"Why So Serious?": "SWSS",
+			"Gasping for Flair": "SGFF",
+			"The Powerup Girls": "SPUP",
+			"Los Balludos": "SLSB"
+		}
+	},
+	"ELTP Majors": {
+		"Teams": {
+			"FC Jukerecht": "EFCJ",
+			"Laghetti": "ELAB",
+			"Manny on the Cap": "EMTC",
+			"Marsayyy": "EMSY",
+			"Roll Madrid": "ERMA",
+			"The Ballabies": "EBAL",
+			"The CreoKoalas [EU]": "ECRK",
+			"The Snipe's Watch": "ESNW"
+		}
+	},
+	"ELTP Minors": {
+		"Teams": {
+			"FC Jukerecht": "FFCJ",
+			"Laghetti": "FLAB",
+			"Manny on the Cap": "FMTC",
+			"Marsayyy": "FMSY",
+			"Roll Madrid": "FRMA",
+			"The Ballabies": "FBAL",
+			"The CreoKoalas [EU]": "FCRK",
+			"The Snipe's Watch": "FSNW"
+		}
+	}
+}
