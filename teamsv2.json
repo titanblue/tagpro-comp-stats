@@ -6,90 +6,92 @@
 	},
 	"Majors": {
 		"Radius": {
-			"Mickey Mouse Poperation": "MMMP",
-			"Red Hot Chili Poppers": "RHCP",
-			"She Wants the KD": "MSKD",
-			"Stranger Pings": "MSRP",
-			"TC Jukes": "MTCJ",
-			"The CreoKoalas": "MCRK",
-			"The United Pingdom": "MGBR"
+			"ALL CAPS": "MAC",
+            "Balls on Parade": "MBOP",
+            "CreoKoalas": "MCRK",
+            "Mickey Mouse Poperation": "MMMP",
+            "Soviet Ballers": "MSVB",
+            "The United Pingdom": "MGBR"
 		},
 		"Pi": {
-			"Pi-Curious": "MPIC"
+			"Holy Rolers": "MHR"
 		},
 		"Origin": {
-			"Chennai Super Pings": "MCSP"
+			"TC Jukes": "MTCJ"
 		},
+        "Sphere": {
+            "Chennai Super Pings": "MCSP"
+        },
 		"Centra": {
 			"Centra of Attention": "MCOA",
-			"The Good Gravy Boat": "MGGB",
+			"Red Hot Chili Poppers": "RHCP",
 			"The Holy Seehawks": "MTHS"
 		}
 	},
 	"Minors": {
 		"Radius": {
-			"Mickey Mouse Poperation": "NMMP",
-			"Red Hot Chili Poppers": "BHCP",
-			"She Wants the KD": "N7DS",
-			"Stranger Pings": "NBAP",
-			"TC Jukes": "NCLP",
-			"The CreoKoalas": "NCRK",
-			"The United Pingdom": "NBIH"
+			"Balls on Parade": "NBOP",
+            "Ballshevik Revolution": "NBSR",
+            "Blue Hot Chili Poppers": "BHCP",
+            "Boostnia and Herzegovina": "NBIH",
+            "CreoDudes": "NCRD",
+            "Minnie Mouse Poperation": "NMMP",
+            "SMALL CAPS": "NSC"
 		},
 		"Pi": {
-			"Pi-Curious": "NPIC"
+			"Holy Rollers": "NHR"
 		},
 		"Origin": {
-			"Chennai Super Pings": "NPXI"
+			"Pings XI Punjab": "NPXI",
+            "TC Jukes": "NTCJ"
 		},
 		"Centra": {
-			"Centra of Attention": "NAW",
-			"The Good Gravy Boat": "NJNG",
-			"The Holy Seehawks": "NSSP"
+			"Respawnsiballs": "NRSP",
+			"Seattle Superspawnics": "NSSP"
 		}
 	},
 	"NLTP-A": {
 		"Radius": {
-			"Au Neutral": "TAUN",
-			"Gate Keepers": "TGTK",
-			"Rutabaga": "TRTB",
-			"Spike and Subscribe": "TSAS",
-			"The Neutralizers": "TTNT"
+			"Doggy's Tile": "ADST",
+            "Flairbnb": "AFLB",
+            "POGGERS": "APOG",
+            "Return of the Jedi": "ARTJ",
+            "The Probots": "APRO"
 		},
 		"Pi": {
-			"Baoting with Babish": "TBWB"
+			"Pi-Curious": "APIC"
 		},
 		"Origin": {
-			"Ball n Large": "TBNL",
-			"Wait Wait Don't Tag Me": "TWDT",
-			"Wolves of Ball Street": "TWBS"
+			"Ballsagna": "ABOY",
+			"Over the Pants Handoffs": "AOPH",
+            "Pequeños Pandas": "APQP",
+			"WCYDinos": "ADNO"
 		},
 		"Centra": {
-			"877-CAPSNOW": "T877",
-			"Land After Manips": "TLAM",
-			"Respawnsiballs": "TRSP"
+			"SLA": "ASLA",
+			"The Land Before Timers": "ALBT"
 		}
 	},
 	"NLTP-B": {
 		"Radius": {
-			"Au Neutral": "UAUN",
-			"Gate Keepers": "UGTK",
-			"Rutabaga": "URTB",
-			"Spike and Subscribe": "USAS",
-			"The Neutralizers": "UTNT"
+			"Doggy's Tile": "BDST",
+            "Flairbnb": "BFLB",
+            "POGGERS": "BPOG",
+            "Return of the Jedi": "BRTJ",
+            "The Probots": "BPRO"
 		},
 		"Pi": {
-			"Baoting with Babish": "UBWB"
+			"Pi-Curious": "BPIC"
 		},
 		"Origin": {
-			"Ball n Large": "UBNL",
-			"Wait Wait Don't Tag Me": "UWDT",
-			"Wolves of Ball Street": "UWBS"
+			"Ballsagna": "BBOY",
+			"Over the Pants Handoffs": "BOPH",
+            "Pequeños Pandas": "BPQP",
+			"WCYDinos": "BDNO"
 		},
 		"Centra": {
-			"877-CAPSNOW": "U877",
-			"Land After Manips": "ULAM",
-			"Respawnsiballs": "URSP"
+			"SLA": "BSLA",
+			"The Land Before Timers": "BLBT"
 		}
 	},
 	"US Contenders": {
@@ -115,28 +117,16 @@
 			"Los Balludos": "SLSB"
 		}
 	},
-	"ELTP Majors": {
+	"ECLTP": {
 		"Teams": {
-			"FC Jukerecht": "EFCJ",
-			"Laghetti": "ELAB",
-			"Manny on the Cap": "EMTC",
-			"Marsayyy": "EMSY",
-			"Roll Madrid": "ERMA",
-			"The Ballabies": "EBAL",
-			"The CreoKoalas [EU]": "ECRK",
-			"The Snipe's Watch": "ESNW"
-		}
-	},
-	"ELTP Minors": {
-		"Teams": {
-			"FC Jukerecht": "FFCJ",
-			"Laghetti": "FLAB",
-			"Manny on the Cap": "FMTC",
-			"Marsayyy": "FMSY",
-			"Roll Madrid": "FRMA",
-			"The Ballabies": "FBAL",
-			"The CreoKoalas [EU]": "FCRK",
-			"The Snipe's Watch": "FSNW"
+			"Ballmere City": "CBMC",
+            "Big Chungus": "CBGC",
+            "Dog Strangles": "CDOG",
+            "Janusze": "CJNZ",
+            "Lagetti": "CLAB",
+            "Limitless": "CLMT",
+            "Rickrollers": "CRKR",
+            "Stranger Tags": "CSRT"
 		}
 	}
 }

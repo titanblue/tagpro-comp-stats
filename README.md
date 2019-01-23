@@ -70,13 +70,62 @@ If you are viewing a no-script game in spectator mode, you will also be able to 
 
 This script imports two jsons in order to provide accurate information for players.
 
-teams.json holds information about each team and the corresponding abbreviation. It is formatted as a json object where each league is a property. Each league contains three arrays. The first array is the raw list. This is the list that will show up under the Red and Blue team names. The second array contains header labels. These labels help to distinguish teams based on some qualification like server or conference. The third array is the abbreviation list. This array should be the exact same size as the first array, where each position corresponds to the abbreviation of the team in the first array.
+teams.json holds information about each team and the corresponding abbreviation. It is formatted as a json object where each league is a property. Each league contains the same number of objects as divisions in the league, with division names as the properties. These objects will then have the full team name as the property and the team abbreviation as the value.
 
-In addition, there is a Leagues property which contains the list of all leagues in the json. This is used to populate the autoscore league selector at the top of the group page.
+In addition, there is a Leagues property which contains the list of all leagues in the json. This is used to populate the autoscore league selector at the top of the group page. Similar to each league, this is also split into "divisions" to distinguish each league. However, league names are stored in arrays instead of properties since there is no further information needed.
+
+For example:
+
+```javascript
+{
+    "Leagues": { // League list split into 3 "Divisions"
+		"NA Competitive": ["NFTL-A", "NFTL-B", "US Contenders"], // array containing league names
+		"NA Tournaments": ["TToC", "RCL", "CLTP", "Pipberry"],
+		"EU Competitive": ["ELTP Majors", "ELTP Minors"]
+	},
+    "NFTL-A": { // League
+		"Radius": { // Division
+			"Au Neutral": "TAUN", // Individual Team
+			"Gate Keepers": "TGTK",
+			"Rutabaga": "TRTB",
+			"Spike and Subscribe": "TSAS",
+			"The Neutralizers": "TTNT"
+		},
+		"Pi": { // Second Division
+			"Baoting with Babish": "TBWB" // Individual Team
+		},
+		"Origin": { // Third Division
+			"Ball n Large": "TBNL", // Individual Team
+			"Wait Wait Don't Tag Me": "TWDT",
+			"Wolves of Ball Street": "TWBS"
+		},
+		"Centra": { // Fourth Division
+			"877-CAPSNOW": "T877", // Individual Team
+			"Land After Manips": "TLAM",
+			"Respawnsiballs": "TRSP"
+		}
+	}
+    // continue leagues after
+}
+```
 
 jerseys.json holds the raw imgur IDs for the jerseys of each team. It is formatted as a json object where each team abbreviation is a property. Abbreviations are sorted alphabetically, with the exception of NLTP (with league identifiers A and B) because league rules mandate the same abbreviation for both teams. Each abbreviation contains a single array with two strings and four numbers corresponding to the raw imgur IDs of the jerseys and the transparency of each jersey. The first string is the red jersey and the second string is the blue jersey. The first number corresponds to the transparency of the actual ball with the red jersey and the second number corresponds to the transparency of the actual ball with the blue jersey. The third number corresponds to the transparency of the red jersey and the second number corresponds to the transparency of the blue jersey. 1 is the default value while 0 is fully transparent.
 
-For examples on how to format each json, consult the teams.json and jerseys.json above.
+For example:
+
+```javascript
+{
+    "MGGB": ["TAMY9Ur", // imgur ID for red jersey
+        "vFE57qK", // imgur ID for blue jersey
+        1, // transparency of ball with red jersey
+        1, // transparency of ball with blue jersey
+        1, // transparency of jersey with red jersey
+        1], //  transparency of jersey with blue jersey
+    "MPIC": ["oEGw0Ql", "xIyWZ5w", 1, 1, 1, 1],
+    "MCRK": ["pxYvTOi", "akr6qGR", 1, 1, 1, 1]
+    // continue teams after
+}
+```
 
 --- 
 
