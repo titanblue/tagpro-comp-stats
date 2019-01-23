@@ -851,6 +851,12 @@ function submitStats(backscoreRedCaps, backscoreBlueCaps, tableExport, teamNum, 
     if (groupCapLimit == 0) {
         groupCapLimit = -1;
     }
+    if (groupServer == "test") {
+        if (isNaN(groupPort)) {
+            //should fix test server data being invalid
+            groupPort = "8000"
+        }
+    }
     if (endCheck === true)  { // This occurs when a spectator reaches the end of the game and the 'end' event is activated
         submitRequest.open("POST", backscoreLink + "&entry.2031694514=" + "X" + "&submit=Submit");
         console.log("Game detected as complete [End event], stats submitted");
