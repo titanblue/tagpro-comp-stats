@@ -656,6 +656,11 @@ function leaderReady() {
             if (document.getElementsByName("competitiveSettings")[0].checked === false) {
                 document.getElementsByName("competitiveSettings")[0].click(); // Turns on competitive settings
             }
+            if (!!document.getElementById("autoscoreLeague") && !!document.getElementById("redTeamAbr")) { // unhide leader elements if the user already had them loaded
+                document.getElementById("autoscoreLeague").style.display = "block";
+                document.getElementById("redTeamAbr").style.display = "block";
+                document.getElementById("blueTeamAbr").style.display = "block";
+            }
         }
     },100);
     GM_setValue("groupId", window.location.href.split("/")[4]);
